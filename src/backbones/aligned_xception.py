@@ -52,21 +52,42 @@ def DepthWiseConvolutionBlock(
         use_bias=False, name=block_prefix + '_DepthwiseConv2D'
     )(y)
     y = tf.keras.layers.BatchNormalization(
-        name=block_prefix + '_BatchNormalization'
+        name=block_prefix + '_BatchNormalization_Depth'
     )(y)
     y = tf.keras.layers.Activation(
         tf.nn.relu,
-        name=block_prefix + '_Activation'
+        name=block_prefix + '_Activation_Depth'
     )(y)
     y = tf.keras.layers.Conv2D(
         filters, (1, 1), padding='same', use_bias=False,
         name=block_prefix + '_Pointwise_Conv2D'
     )(y)
     y = tf.keras.layers.BatchNormalization(
-        name=block_prefix + '_BatchNormalization'
+        name=block_prefix + '_BatchNormalization_Point'
     )(y)
     y = tf.keras.layers.Activation(
         tf.nn.relu,
-        name=block_prefix + '_Activation'
+        name=block_prefix + '_Activation_Point'
     )(y)
+    return y
+
+
+def EntryFlowBlock(input_tensor, filters, block_prefix):
+    y = DepthWiseConvolutionBlock(
+        input_tensor, filters, stride=1,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_1'
+    )
+    y = DepthWiseConvolutionBlock(
+        y, filters, stride=1,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_2'
+    )
+    y = DepthWiseConvolutionBlock(
+        y, filters, stride=2,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_3'
+    )
+    residual = DepthWiseConvolutionBlock(
+        input_tensor, filters, kernel_size=1, stride=2,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_Residual'
+    )
+    y = tf.keras.layers.Add(name=block_prefix + '_Add')([y, residual])
     return y
