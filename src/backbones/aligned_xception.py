@@ -91,3 +91,22 @@ def EntryFlowBlock(input_tensor, filters, block_prefix):
     )
     y = tf.keras.layers.Add(name=block_prefix + '_Add')([y, residual])
     return y
+
+
+def MiddleFlowBlock(input_tensor, block_prefix):
+    y = DepthWiseConvolutionBlock(
+        input_tensor, 728, stride=1,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_1'
+    )
+    y = DepthWiseConvolutionBlock(
+        y, 728, stride=1,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_2'
+    )
+    y = DepthWiseConvolutionBlock(
+        y, 728, stride=1,
+        block_prefix=block_prefix + '_DepthWiseConvBlock_3'
+    )
+    y = tf.keras.layers.Add(
+        name=block_prefix + '_Add'
+    )([y, input_tensor])
+    return y
