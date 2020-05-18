@@ -26,6 +26,7 @@ def ConvolutionBlock(
         name=block_prefix + '_BatchNormalization'
     )(y) if use_bn else y
     y = tf.keras.layers.Activation(
-        'relu', name=block_prefix + '_Activation'
+        tf.nn.relu,
+        name=block_prefix + '_Activation'
     )(y) if use_activation else y
     return y
