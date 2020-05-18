@@ -9,7 +9,7 @@ def ConvolutionBlock(
     if stride == 1:
         y = tf.keras.layers.Conv2D(
             filters, (kernel_size, kernel_size), (stride, stride),
-            use_bias=use_bias, name=block_prefix + '_Conv2D'
+            padding='same', use_bias=use_bias, name=block_prefix + '_Conv2D'
         )(y)
     else:
         kernel_size_effective = kernel_size + (kernel_size - 1) * (rate - 1)
