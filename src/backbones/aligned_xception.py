@@ -85,7 +85,7 @@ def EntryFlowBlock(input_tensor, filters, block_prefix):
         y, filters, stride=2,
         block_prefix=block_prefix + '_DepthWiseConvBlock_3'
     )
-    residual = DepthWiseConvolutionBlock(
+    residual = ConvolutionBlock(
         input_tensor, filters, kernel_size=1, stride=2,
         block_prefix=block_prefix + '_DepthWiseConvBlock_Residual'
     )
