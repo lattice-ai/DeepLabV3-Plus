@@ -2,11 +2,11 @@ import tensorflow as tf
 
 
 def ASPPConvBlock(
-        input_tensor, filters, kernel_size=3,
+        input_tensor, filters, kernel_size=3, rate=1,
         padding='same', use_bias=False, block_prefix=None):
     y = tf.keras.layers.Conv2D(
         filters, kernel_size=(kernel_size, kernel_size), padding=padding,
-        use_bias=use_bias, name=block_prefix + '_Conv2D'
+        dilation_rate=rate, use_bias=use_bias, name=block_prefix + '_Conv2D'
     )(input_tensor)
     y = tf.keras.layers.BatchNormalization(
         name=block_prefix + '_BatchNormalization'
