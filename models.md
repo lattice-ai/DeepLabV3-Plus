@@ -1,5 +1,4 @@
 # Model Architectures
 
-## Aligned Exception
 
-![](./assets/aligned_exception.png)
+![](./assets/deeplabv3plus.svg)
