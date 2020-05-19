@@ -17,7 +17,7 @@ def ASPPConvBlock(
     return y
 
 
-def AtrousSpatialPyramidPooling(input_tensor, block_prefix):
+def AtrousSpatialPyramidPooling(input_tensor, block_prefix='ASPP'):
     input_shape = tf.keras.backend.int_shape(input_tensor)
     # 1x1 Conv
     y_1x1 = ASPPConvBlock(
@@ -49,10 +49,9 @@ def AtrousSpatialPyramidPooling(input_tensor, block_prefix):
     )(input_tensor)
     y_image_pooling = ASPPConvBlock(
         y_image_pooling, 256, kernel_size=1,
-        name=block_prefix + '_Image_Pooling_Conv_Block'
+        block_prefix=block_prefix + '_Image_Pooling_Conv_Block'
     )
     y_image_pooling = tf.keras.layers.UpSampling2D(
-        y_image_pooling,
         size=[input_shape[1], input_shape[2]],
         interpolation='bilinear'
     )(y_image_pooling)
