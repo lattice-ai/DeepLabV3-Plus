@@ -60,3 +60,16 @@ def block1(x, filters, kernel_size=3, stride=1, conv_shortcut=True, name=None):
     x = tf.keras.layers.Add(name=name + '_add')([shortcut, x])
     x = tf.keras.layers.Activation('relu', name=name + '_out')(x)
     return x
+
+
+def stack1(x, filters, blocks, stride1=2, name=None):
+    x = block1(
+        x, filters, stride=stride1,
+        name=name + '_block1'
+    )
+    for i in range(2, blocks + 1):
+        x = block1(
+            x, filters, conv_shortcut=False,
+            name=name + '_block' + str(i)
+        )
+    return x
