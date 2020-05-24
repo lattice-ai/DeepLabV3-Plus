@@ -9,6 +9,17 @@ Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pd
 
 Model Architectures can be found [here](./models.md).
 
+## Setup Cityscapes
+
+Register on [https://www.cityscapes-dataset.com/](https://www.cityscapes-dataset.com/).
+
+Edit `dataset/cityscapes.sh` and put in your username and password.
+
+```shell script
+cd dataset
+bash cityscapes.sh
+```
+
 ## Code to test Model
 
 ```python
