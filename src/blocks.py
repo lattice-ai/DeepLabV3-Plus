@@ -1,6 +1,19 @@
 import tensorflow as tf
 
 
+def BilinearUpsample(tensor, size, name):
+
+    def bilinear_upsample(x, size):
+        resized = tf.image.resize(
+            images=x, size=size)
+        return resized
+
+    return tf.keras.layers.Lambda(
+        lambda x: bilinear_upsample(x, size),
+        output_shape=size, name=name
+    )(tensor)
+
+
 def ASPPConvBlock(
         input_tensor, filters, kernel_size=3, rate=1,
         padding='same', use_bias=False, block_prefix=None):
@@ -51,10 +64,14 @@ def AtrousSpatialPyramidPooling(input_tensor, block_prefix='ASPP'):
         y_image_pooling, 256, kernel_size=1,
         block_prefix=block_prefix + '_Image_Pooling_Conv_Block'
     )
-    y_image_pooling = tf.keras.layers.UpSampling2D(
-        size=[input_shape[1], input_shape[2]],
-        interpolation='bilinear'
-    )(y_image_pooling)
+    # y_image_pooling = tf.keras.layers.UpSampling2D(
+    #     size=[input_shape[1], input_shape[2]],
+    #     interpolation='bilinear'
+    # )(y_image_pooling)
+    y_image_pooling = BilinearUpsample(
+        y_image_pooling, (input_shape[1], input_shape[2]),
+        name=block_prefix + 'Image_Pooling_Upsample'
+    )
     # Concatenation
     y = tf.keras.layers.Concatenate(
         name=block_prefix + '_Concatenate'
