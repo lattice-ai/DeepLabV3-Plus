@@ -10,6 +10,7 @@ class CityscapesDataet:
         self.train_mask_list = self.config['train_mask_list']
         self.val_image_list = self.config['val_image_list']
         self.val_mask_list = self.config['val_mask_list']
+        self.assert_dataset()
 
     def assert_dataset(self):
         for i in range(len(self.train_image_list)):
