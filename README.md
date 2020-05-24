@@ -69,3 +69,14 @@ configurations = {
 trainer = Trainer(configurations)
 history = trainer.train()
 ```
+
+## Citation
+
+```
+@misc{1802.02611,
+    Author = {Liang-Chieh Chen and Yukun Zhu and George Papandreou and Florian Schroff and Hartwig Adam},
+    Title = {Encoder-Decoder with Atrous Separable Convolution for Semantic Image Segmentation},
+    Year = {2018},
+    Eprint = {arXiv:1802.02611},
+}
+```
