@@ -1,3 +1,5 @@
+import os
+import wandb as wb
 import tensorflow as tf
 from src.model import DeepLabV3Plus
 from src.datasets.cityscapes import CityscapesDataet
@@ -7,6 +9,7 @@ class Trainer:
 
     def __init__(self, config):
         self.config = config
+        wb.init(project=self.config['wandb_project'])
         self.strategy = self.config['strategy']
         with self.strategy.scope():
             self.cityscapes_dataset = CityscapesDataet(self.config['dataset_config'])
@@ -46,9 +49,7 @@ class Trainer:
             validation_data=self.val_dataset,
             validation_steps=val_steps_per_epoch,
             callbacks=[
-                tf.keras.callbacks.TensorBoard(
-                    log_dir='logs', write_graph=True, update_freq='batch'
-                ),
+                wb.keras.WandbCallback(),
                 tf.keras.callbacks.ModelCheckpoint(
                     mode='min', filepath=self.config['weight_file'],
                     monitor='val_loss', save_best_only='True',
@@ -56,4 +57,5 @@ class Trainer:
                 )
             ]
         )
+        self.model.save(os.path.join(wb.run.dir, self.config['weight_file']))
         return history
