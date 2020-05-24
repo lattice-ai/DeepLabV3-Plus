@@ -82,3 +82,35 @@ class CityscapesDataet:
         )
         image, mask = self.random_crop(image, mask)
         return image, mask
+
+    def get_datasets(self):
+        train_dataset = tf.data.Dataset.from_tensor_slices(
+            (self.train_image_list, self.train_mask_list)
+        )
+        train_dataset = train_dataset.shuffle(buffer_size=128)
+        train_dataset = train_dataset.map(
+            map_func=self.map_function, drop_remainder=True,
+            num_parallel_calls=tf.data.experimental.AUTOTUNE,
+        )
+        train_dataset = train_dataset.batch(
+            batch_size=self.config['train_batch_size']
+        )
+        train_dataset = train_dataset.repeat()
+        train_dataset = train_dataset.prefetch(
+            tf.data.experimental.AUTOTUNE
+        )
+        val_dataset = tf.data.Dataset.from_tensor_slices(
+            (self.val_image_list, self.val_mask_list)
+        )
+        val_dataset = val_dataset.map(
+            map_func=self.map_function, drop_remainder=True,
+            num_parallel_calls=tf.data.experimental.AUTOTUNE,
+        )
+        val_dataset = val_dataset.batch(
+            batch_size=self.config['val_batch_size']
+        )
+        val_dataset = val_dataset.repeat()
+        val_dataset = val_dataset.prefetch(
+            tf.data.experimental.AUTOTUNE
+        )
+        return train_dataset, val_dataset
