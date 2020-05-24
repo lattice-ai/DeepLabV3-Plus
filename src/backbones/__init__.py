@@ -49,3 +49,9 @@ def AlignedException(input_tensor, block_prefix='Aligned_Exception'):
         block_prefix=block_prefix + 'Exit_Flow_DepthWiseConvBlock_6'
     )
     return y
+
+
+def get_resnet_101(input_shape, weights='imagenet'):
+    return tf.keras.applications.resnet.ResNet101(
+        input_shape=input_shape, weights=weights, include_top=False
+    )
