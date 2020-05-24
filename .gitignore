@@ -4,3 +4,5 @@ test.py
 src/backbones/__pycache__/
 dump.txt
 src/__pycache__/
+.DS_Store
+assets/.DS_Store
