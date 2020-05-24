@@ -6,7 +6,7 @@ from .blocks import AtrousSpatialPyramidPooling, BilinearUpsample
 def DeepLabV3Plus(input_shape=(512, 512, 3), backbone='resnet101', n_classes=66, model_name='DeepLabV3Plus'):
     # Encoder
     if backbone == 'resnet101':
-        backbone = get_resnet_101(input_shape=input_shape, weights=None)
+        backbone = get_resnet_101(input_shape=input_shape, weights='imagenet')
         input_tensor = backbone.input
         y = AtrousSpatialPyramidPooling(backbone.get_layer('conv5_block3_out').output)
         decoder_input_tensor = backbone.get_layer('conv2_block3_add').output
