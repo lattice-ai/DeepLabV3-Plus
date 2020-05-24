@@ -45,3 +45,29 @@ class CityscapesDataet:
                 (tf.greater(flip, 0), lambda: tf.image.flip_left_right(image))
             ], default=lambda: image)
         return image
+
+    def random_crop(self, image, mask):
+        image_dims = image.shape
+        offset_h = tf.random.uniform(
+            shape=(1,),
+            maxval=image_dims[0] - self.config['patch_height'],
+            dtype=tf.int32
+        )[0]
+        offset_w = tf.random.uniform(
+            shape=(1,),
+            maxval=image_dims[1] - self.config['patch_width'],
+            dtype=tf.int32
+        )[0]
+        image = tf.image.crop_to_bounding_box(
+            image, offset_height=offset_h,
+            offset_width=offset_w,
+            target_height=self.config['patch_height'],
+            target_width=self.config['patch_width']
+        )
+        mask = tf.image.crop_to_bounding_box(
+            mask, offset_height=offset_h,
+            offset_width=offset_w,
+            target_height=self.config['patch_height'],
+            target_width=self.config['patch_width']
+        )
+        return image, mask
