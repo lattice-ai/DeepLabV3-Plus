@@ -14,6 +14,6 @@ Model Architectures can be found [here](./models.md).
 ```python
 from src.model import DeepLabV3Plus
 
-model = DeepLabV3Plus()
+model = DeepLabV3Plus(backbone='resnet101')
 model.summary()
 ```
