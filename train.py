@@ -1,5 +1,6 @@
 import os
 import wandb as wb
+from glob import glob
 import tensorflow as tf
 from src.model import DeepLabV3Plus
 from src.datasets.cityscapes import CityscapesDataet
@@ -59,3 +60,27 @@ class Trainer:
         )
         self.model.save(os.path.join(wb.run.dir, self.config['weight_file']))
         return history
+
+
+if __name__ == '__main__':
+    configurations = {
+        'dataset_config': {
+            'train_image_list': sorted(glob('cityscapes/dataset/train_images/*')),
+            'train_mask_list': sorted(glob('cityscapes/dataset/train_masks/*')),
+            'val_image_list': sorted(glob('cityscapes/dataset/val_images/*')),
+            'val_mask_list': sorted(glob('cityscapes/dataset/val_masks/*')),
+            'patch_height': 512,
+            'patch_width': 512,
+            'train_batch_size': 16,
+            'val_batch_size': 16
+        },
+        'wandb_project': 'deeplav-v3-plus',
+        'strategy': tf.distribute.OneDeviceStrategy(),
+        'input_shape': (512, 512, 3),
+        'backbone': 'resnet101',
+        'n_classes': 66,
+        'bn_momentum': 0.9997,
+        'bn_epsilon': 1e-5,
+        'batch_size': 16,
+        'epochs': 500,
+    }
