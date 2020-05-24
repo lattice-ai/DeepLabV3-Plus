@@ -71,3 +71,14 @@ class CityscapesDataet:
             target_width=self.config['patch_width']
         )
         return image, mask
+
+    def map_function(self, image_path, mask_path):
+        flip = tf.random.uniform(
+            shape=[1, ], minval=0, maxval=2, dtype=tf.int32)[0]
+        image, mask = self.read_image(
+            image_path, flip=flip
+        ), self.read_image(
+            mask_path, mask=True, flip=flip
+        )
+        image, mask = self.random_crop(image, mask)
+        return image, mask
