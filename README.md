@@ -45,7 +45,7 @@ from train import Trainer
 
 # Sample Configuration
 configurations = {
-'dataset_config': {
+    'dataset_config': {
         'train_image_list': sorted(glob('cityscapes/dataset/train_images/*')),
         'train_mask_list': sorted(glob('cityscapes/dataset/train_masks/*')),
         'val_image_list': sorted(glob('cityscapes/dataset/val_images/*')),
