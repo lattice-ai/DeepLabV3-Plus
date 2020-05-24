@@ -84,3 +84,5 @@ if __name__ == '__main__':
         'batch_size': 16,
         'epochs': 500,
     }
+    trainer = Trainer(configurations)
+    history = trainer.train()
