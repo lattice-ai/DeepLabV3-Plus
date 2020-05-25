@@ -63,24 +63,27 @@ from train import Trainer
 # Sample Configuration
 configurations = {
     'dataset_config': {
-        'train_image_list': sorted(glob('cityscapes/dataset/train_images/*')),
-        'train_mask_list': sorted(glob('cityscapes/dataset/train_masks/*')),
-        'val_image_list': sorted(glob('cityscapes/dataset/val_images/*')),
-        'val_mask_list': sorted(glob('cityscapes/dataset/val_masks/*')),
+        'name': 'camvid',
+        'train_image_list': sorted(glob('./dataset/CamVid/train/*')),
+        'train_mask_list': sorted(glob('./dataset/CamVid/train_labels/*')),
+        'val_image_list': sorted(glob('./dataset/CamVid/val/*')),
+        'val_mask_list': sorted(glob('./dataset/CamVid/val_labels/*')),
         'patch_height': 512,
         'patch_width': 512,
-        'train_batch_size': 16,
-        'val_batch_size': 16
+        'train_batch_size': 8,
+        'val_batch_size': 8
     },
     'wandb_project': 'deeplav-v3-plus',
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
     'input_shape': (512, 512, 3),
     'backbone': 'resnet101',
-    'n_classes': 66,
+    'n_classes': 32,
     'bn_momentum': 0.9997,
     'bn_epsilon': 1e-5,
-    'batch_size': 16,
+    'learning_rate': 1e-4,
+    'batch_size': 8,
     'epochs': 500,
+    'weight_file': 'best_weights.h5'
 }
 
 trainer = Trainer(configurations)
