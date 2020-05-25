@@ -115,3 +115,17 @@ class CityscapesDataet:
             tf.data.experimental.AUTOTUNE
         )
         return train_dataset, val_dataset
+
+
+if __name__ == '__main__':
+    configurations = {
+        'train_image_list': sorted(glob('../../datasets/cityscapes/dataset/train_images/*')),
+        'train_mask_list': sorted(glob('../../datasets/cityscapes/dataset/train_masks/*')),
+        'val_image_list': sorted(glob('../../datasets/cityscapes/dataset/val_images/*')),
+        'val_mask_list': sorted(glob('../../datasets/cityscapes/dataset/val_masks/*')),
+        'patch_height': 512,
+        'patch_width': 512,
+        'train_batch_size': 16,
+        'val_batch_size': 16
+    }
+    cityscapes_dataset = CityscapesDataet(configurations)
