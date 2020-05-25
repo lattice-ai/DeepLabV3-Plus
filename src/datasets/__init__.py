@@ -24,7 +24,7 @@ class Dataset:
         image = tf.io.read_file(image_path)
         if not mask:
             image = tf.cast(tf.image.decode_png(image, channels=3), dtype=tf.float32)
-            if img_height is None and img_width is None:
+            if img_height is not None and img_width is not None:
                 image = tf.image.resize(images=image, size=[img_height, img_width])
             image = tf.image.random_brightness(image, max_delta=50.)
             image = tf.image.random_saturation(image, lower=0.5, upper=1.5)
@@ -37,7 +37,7 @@ class Dataset:
             image = image[:, :, ::-1] - tf.constant([103.939, 116.779, 123.68])
         else:
             image = tf.image.decode_png(image, channels=1)
-            if img_height is None and img_width is None:
+            if img_height is not None and img_width is not None:
                 image = tf.image.resize(images=image, size=[img_height, img_width])
             image = tf.cast(image, dtype=tf.uint8)
             image = tf.case([

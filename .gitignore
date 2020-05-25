@@ -7,3 +7,4 @@ src/__pycache__/
 .DS_Store
 assets/.DS_Store
 dataset/CamVid/
+src/datasets/__pycache__/

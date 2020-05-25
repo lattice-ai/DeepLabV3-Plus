@@ -1,11 +1,12 @@
 from glob import glob
 from . import Dataset
+import tensorflow as tf
 
 
-class CamVidDataet(Dataset):
+class CamVidDataset(Dataset):
 
     def __init__(self, config):
-        super(CamVidDataet, self).__init__(config)
+        super(CamVidDataset, self).__init__(config)
         self.assert_dataset()
 
     def assert_dataset(self):
@@ -18,6 +19,19 @@ class CamVidDataet(Dataset):
                    self.val_mask_list[i].split('/')[-1][:-6]
         print('Validation Directories Good to go')
 
+    def map_function(self, image_path, mask_path):
+        flip = tf.random.uniform(
+            shape=[1, ], minval=0, maxval=2, dtype=tf.int32)[0]
+        image, mask = self.read_image(
+            image_path, flip=flip,
+            img_height=960, img_width=720
+        ), self.read_image(
+            mask_path, mask=True, flip=flip,
+            img_height=960, img_width=720
+        )
+        image, mask = self.random_crop(image, mask)
+        return image, mask
+
 
 if __name__ == '__main__':
     configurations = {
@@ -26,4 +40,4 @@ if __name__ == '__main__':
         'val_image_list': sorted(glob('../../dataset/CamVid/val/*')),
         'val_mask_list': sorted(glob('../../dataset/CamVid/val_labels/*')),
     }
-    camvid_dataset = CamVidDataet(configurations)
+    camvid_dataset = CamVidDataset(configurations)
