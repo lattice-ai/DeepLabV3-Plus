@@ -15,25 +15,24 @@ class Trainer:
         with self.strategy.scope():
             self.cityscapes_dataset = CityscapesDataet(self.config['dataset_config'])
             self.train_dataset, self.val_dataset = self.cityscapes_dataset.get_datasets()
-        self.model = self.define_model()
+            self.model = self.define_model()
 
     def define_model(self):
-        with self.strategy.scope():
-            model = DeepLabV3Plus(
-                input_shape=self.config['input_shape'],
-                backbone=self.config['backbone'],
-                n_classes=self.config['n_classes']
-            )
-            for layer in model.layers:
-                if isinstance(layer, tf.keras.layers.BatchNormalization):
-                    layer.momentum = self.config['bn_momentum'],
-                    layer.epsilon = self.config['bn_epsilon']
-                elif isinstance(layer, tf.keras.layers.Conv2D):
-                    layer.kernel_regularizer = tf.keras.regularizers.l2(1e-4)
-            model.compile(
-                loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                optimizer=tf.optimizers.Adam(learning_rate=1e-4), metrics=['accuracy']
-            )
+        model = DeepLabV3Plus(
+            input_shape=self.config['input_shape'],
+            backbone=self.config['backbone'],
+            n_classes=self.config['n_classes']
+        )
+        for layer in model.layers:
+            if isinstance(layer, tf.keras.layers.BatchNormalization):
+                layer.momentum = self.config['bn_momentum'],
+                layer.epsilon = self.config['bn_epsilon']
+            elif isinstance(layer, tf.keras.layers.Conv2D):
+                layer.kernel_regularizer = tf.keras.regularizers.l2(1e-4)
+        model.compile(
+            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+            optimizer=tf.optimizers.Adam(learning_rate=1e-4), metrics=['accuracy']
+        )
         return model
 
     def train(self):
