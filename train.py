@@ -13,6 +13,8 @@ class Trainer:
         wb.init(project=self.config['wandb_project'])
         self.strategy = self.config['strategy']
         with self.strategy.scope():
+            v = tf.Variable(1.0)
+            print('Device:', v.device)
             self.cityscapes_dataset = CityscapesDataet(self.config['dataset_config'])
             self.train_dataset, self.val_dataset = self.cityscapes_dataset.get_datasets()
             self.model = self.define_model()
