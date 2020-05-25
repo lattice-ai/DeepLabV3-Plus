@@ -18,9 +18,8 @@ class Trainer:
                 from src.datasets.cityscapes import CityscapesDataet
                 self.dataset = CityscapesDataet(self.config['dataset_config'])
             elif self.config['dataset_config']['name'] == 'camvid':
-                from src.datasets.camvid import CamVidDataet
-                self.dataset = CamVidDataet(self.config['dataset_config'])
-            print('Dataset Length:', len(self.dataset))
+                from src.datasets.camvid import CamVidDataset
+                self.dataset = CamVidDataset(self.config['dataset_config'])
             self.train_dataset, self.val_dataset = self.dataset.get_datasets()
             self.model = self.define_model()
 
@@ -38,7 +37,10 @@ class Trainer:
                 layer.kernel_regularizer = tf.keras.regularizers.l2(1e-4)
         model.compile(
             loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            optimizer=tf.optimizers.Adam(learning_rate=1e-4), metrics=['accuracy']
+            optimizer=tf.optimizers.Adam(
+                learning_rate=self.config['learning_rate']
+            ),
+            metrics=['accuracy']
         )
         return model
 
@@ -78,18 +80,20 @@ if __name__ == '__main__':
             'val_mask_list': sorted(glob('./dataset/CamVid/val_labels/*')),
             'patch_height': 512,
             'patch_width': 512,
-            'train_batch_size': 16,
-            'val_batch_size': 16
+            'train_batch_size': 8,
+            'val_batch_size': 8
         },
         'wandb_project': 'deeplav-v3-plus',
         'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
         'input_shape': (512, 512, 3),
         'backbone': 'resnet101',
-        'n_classes': 66,
+        'n_classes': 32,
         'bn_momentum': 0.9997,
         'bn_epsilon': 1e-5,
-        'batch_size': 16,
+        'learning_rate': 1e-4,
+        'batch_size': 8,
         'epochs': 500,
+        'weight_file': 'best_weights.h5'
     }
     trainer = Trainer(configurations)
-    history = trainer.train()
+    train_history = trainer.train()
