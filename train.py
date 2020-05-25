@@ -20,6 +20,7 @@ class Trainer:
             elif self.config['dataset_config']['name'] == 'camvid':
                 from src.datasets.camvid import CamVidDataet
                 self.dataset = CamVidDataet(self.config['dataset_config'])
+            print('Dataset Length:', len(self.dataset))
             self.train_dataset, self.val_dataset = self.dataset.get_datasets()
             self.model = self.define_model()
 
@@ -70,11 +71,11 @@ class Trainer:
 if __name__ == '__main__':
     configurations = {
         'dataset_config': {
-            'name': 'cityscapes',
-            'train_image_list': sorted(glob('cityscapes/dataset/train_images/*')),
-            'train_mask_list': sorted(glob('cityscapes/dataset/train_masks/*')),
-            'val_image_list': sorted(glob('cityscapes/dataset/val_images/*')),
-            'val_mask_list': sorted(glob('cityscapes/dataset/val_masks/*')),
+            'name': 'camvid',
+            'train_image_list': sorted(glob('./dataset/CamVid/train/*')),
+            'train_mask_list': sorted(glob('./dataset/CamVid/train_labels/*')),
+            'val_image_list': sorted(glob('./dataset/CamVid/val/*')),
+            'val_mask_list': sorted(glob('./dataset/CamVid/val_labels/*')),
             'patch_height': 512,
             'patch_width': 512,
             'train_batch_size': 16,
