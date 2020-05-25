@@ -31,15 +31,15 @@ class Dataset:
             image = tf.image.random_contrast(image, lower=0.5, upper=1.5)
             image = tf.clip_by_value(image, 0, 255)
             image = tf.case([
-                (tf.greater(flip, 0), lambda: tf.image.flip_left_right(img))
-            ], default=lambda: img)
+                (tf.greater(flip, 0), lambda: tf.image.flip_left_right(image))
+            ], default=lambda: image)
             image = image[:, :, ::-1] - tf.constant([103.939, 116.779, 123.68])
         else:
             img = tf.image.decode_png(image, channels=1)
             img = tf.cast(tf.image.resize(images=image, size=[
                 img_height, img_width]), dtype=tf.uint8)
             image = tf.case([
-                (tf.greater(flip, 0), lambda: tf.image.flip_left_right(img))
+                (tf.greater(flip, 0), lambda: tf.image.flip_left_right(image))
             ], default=lambda: image)
         return image
 
