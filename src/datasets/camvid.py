@@ -12,6 +12,13 @@ class CamVidDataet:
         self.val_mask_list = self.config['val_mask_list']
         self.assert_dataset()
 
+    def __len__(self):
+        self.assert_dataset()
+        return {
+            'train': len(self.train_image_list),
+            'val': len(self.val_image_list)
+        }
+
     def assert_dataset(self):
         for i in range(len(self.train_image_list)):
             assert self.train_image_list[i].split('/')[-1][:-4] ==\
