@@ -73,7 +73,7 @@ configurations = {
         'val_batch_size': 16
     },
     'wandb_project': 'deeplav-v3-plus',
-    'strategy': tf.distribute.OneDeviceStrategy(),
+    'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
     'input_shape': (512, 512, 3),
     'backbone': 'resnet101',
     'n_classes': 66,
