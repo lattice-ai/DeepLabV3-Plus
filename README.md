@@ -11,16 +11,31 @@ Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pd
 
 Model Architectures can be found [here](./models.md).
 
-## Setup Cityscapes
+## Setup Datasets
 
-Register on [https://www.cityscapes-dataset.com/](https://www.cityscapes-dataset.com/).
+- **Cityscapes**
 
-Edit `dataset/cityscapes.sh` and put in your username and password.
+    Register on [https://www.cityscapes-dataset.com/](https://www.cityscapes-dataset.com/).
 
-```shell script
-cd dataset
-bash cityscapes.sh
-```
+    Edit `dataset/cityscapes.sh` and put in your username and password.
+
+    ```shell script
+    cd dataset
+    bash cityscapes.sh
+    ```
+
+- **CamVid**
+    
+    Register on [https://www.kaggle.com/](https://www.kaggle.com/).
+    
+    Generate Kaggle API Token
+    
+    Edit `dataset/camvid.sh` and put in your kaggle username and kaggle key.
+    
+    ```shell script
+    cd dataset
+    bash camvid.sh
+    ```
 
 ## Code to test Model
 
