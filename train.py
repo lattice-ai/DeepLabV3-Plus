@@ -46,10 +46,10 @@ class Trainer:
 
     def train(self):
         train_steps_per_epoch = len(
-            self.cityscapes_dataset.train_image_list
+            self.dataset.train_image_list
         ) // self.config['batch_size']
         val_steps_per_epoch = len(
-            self.cityscapes_dataset.val_image_list
+            self.dataset.val_image_list
         ) // self.config['batch_size']
         history = self.model.fit(
             self.train_dataset,
