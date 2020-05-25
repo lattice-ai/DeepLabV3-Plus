@@ -3,7 +3,6 @@ import wandb as wb
 from glob import glob
 import tensorflow as tf
 from src.model import DeepLabV3Plus
-from src.datasets.cityscapes import CityscapesDataet
 
 
 class Trainer:
@@ -15,8 +14,13 @@ class Trainer:
         with self.strategy.scope():
             v = tf.Variable(1.0)
             print('Device:', v.device)
-            self.cityscapes_dataset = CityscapesDataet(self.config['dataset_config'])
-            self.train_dataset, self.val_dataset = self.cityscapes_dataset.get_datasets()
+            if self.config['dataset_config']['name'] == 'cityscapes':
+                from src.datasets.cityscapes import CityscapesDataet
+                self.dataset = CityscapesDataet(self.config['dataset_config'])
+            elif self.config['dataset_config']['name'] == 'camvid':
+                from src.datasets.camvid import CamVidDataet
+                self.dataset = CamVidDataet(self.config['dataset_config'])
+            self.train_dataset, self.val_dataset = self.dataset.get_datasets()
             self.model = self.define_model()
 
     def define_model(self):
@@ -66,6 +70,7 @@ class Trainer:
 if __name__ == '__main__':
     configurations = {
         'dataset_config': {
+            'name': 'cityscapes',
             'train_image_list': sorted(glob('cityscapes/dataset/train_images/*')),
             'train_mask_list': sorted(glob('cityscapes/dataset/train_masks/*')),
             'val_image_list': sorted(glob('cityscapes/dataset/val_images/*')),
