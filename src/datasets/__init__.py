@@ -35,8 +35,8 @@ class Dataset:
             ], default=lambda: image)
             image = image[:, :, ::-1] - tf.constant([103.939, 116.779, 123.68])
         else:
-            img = tf.image.decode_png(image, channels=1)
-            img = tf.cast(tf.image.resize(images=image, size=[
+            image = tf.image.decode_png(image, channels=1)
+            image = tf.cast(tf.image.resize(images=image, size=[
                 img_height, img_width]), dtype=tf.uint8)
             image = tf.case([
                 (tf.greater(flip, 0), lambda: tf.image.flip_left_right(image))
