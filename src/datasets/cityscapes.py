@@ -97,11 +97,12 @@ class CityscapesDataet:
         )
         train_dataset = train_dataset.shuffle(buffer_size=128)
         train_dataset = train_dataset.map(
-            map_func=self.map_function, drop_remainder=True,
+            map_func=self.map_function,
             num_parallel_calls=tf.data.experimental.AUTOTUNE,
         )
         train_dataset = train_dataset.batch(
-            batch_size=self.config['train_batch_size']
+            batch_size=self.config['train_batch_size'],
+            drop_remainder=True
         )
         train_dataset = train_dataset.repeat()
         train_dataset = train_dataset.prefetch(
@@ -111,11 +112,12 @@ class CityscapesDataet:
             (self.val_image_list, self.val_mask_list)
         )
         val_dataset = val_dataset.map(
-            map_func=self.map_function, drop_remainder=True,
+            map_func=self.map_function,
             num_parallel_calls=tf.data.experimental.AUTOTUNE,
         )
         val_dataset = val_dataset.batch(
-            batch_size=self.config['val_batch_size']
+            batch_size=self.config['val_batch_size'],
+            drop_remainder=True
         )
         val_dataset = val_dataset.repeat()
         val_dataset = val_dataset.prefetch(
