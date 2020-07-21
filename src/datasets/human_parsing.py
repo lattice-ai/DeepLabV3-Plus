@@ -16,33 +16,33 @@ class HumanParsingDataset:
         return len(self.configs['images'])
 
     def read_img(self, image_path, mask=False):
-        img = tf.io.read_file(image_path)
+        image = tf.io.read_file(image_path)
         if mask:
-            img = tf.image.decode_png(img, channels=1)
-            img.set_shape([None, None, 1])
-            img = (tf.image.resize(
-                images=img, size=[
+            image = tf.image.decode_png(image, channels=1)
+            image.set_shape([None, None, 1])
+            image = (tf.image.resize(
+                images=image, size=[
                     self.configs['height'],
                     self.configs['width']
                 ]
             ))
-            img = tf.cast(img, tf.float32)
+            image = tf.cast(image, tf.float32)
         else:
-            img = tf.image.decode_png(img, channels=3)
-            img.set_shape([None, None, 3])
-            img = (tf.image.resize(
-                images=img, size=[
+            image = tf.image.decode_png(image, channels=3)
+            image.set_shape([None, None, 3])
+            image = (tf.image.resize(
+                images=image, size=[
                     self.configs['height'],
                     self.configs['width']
                 ]
             ))
-            img = tf.cast(img, tf.float32) / 127.5 - 1
-        return img
+            image = tf.cast(image, tf.float32) / 127.5 - 1
+        return image
 
-    def _map_function(self, img_list, mask_list):
-        img = self.read_img(img_list)
+    def _map_function(self, image_list, mask_list):
+        image = self.read_img(image_list)
         mask = self.read_img(mask_list, mask=True)
-        return img, mask
+        return image, mask
 
     def get_dataset(self):
         dataset = tf.data.Dataset.from_tensor_slices(
