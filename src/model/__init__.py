@@ -1,15 +1,16 @@
 import tensorflow as tf
+from .backbones import BACKBONES
 from .blocks import AtrousSpatialPyramidPooling
 
 
-def DeeplabV3Plus(num_classes, height, width):
+def DeeplabV3Plus(num_classes, height, width, backbone='resnet50'):
     model_input = tf.keras.Input(shape=(height, width, 3))
-    resnet50 = tf.keras.applications.ResNet50(
+    resnet50 = BACKBONES[backbone]['model'](
         weights='imagenet',
         include_top=False,
         input_tensor=model_input
     )
-    layer = resnet50.get_layer('conv4_block6_2_relu').output
+    layer = resnet50.get_layer(BACKBONES[backbone]['feature_1']).output
     layer = AtrousSpatialPyramidPooling(layer)
     input_a = tf.keras.layers.UpSampling2D(
         size=(
@@ -19,7 +20,7 @@ def DeeplabV3Plus(num_classes, height, width):
         interpolation='bilinear'
     )(layer)
 
-    input_b = resnet50.get_layer('conv2_block3_2_relu').output
+    input_b = resnet50.get_layer(BACKBONES[backbone]['feature_2']).output
     input_b = tf.keras.layers.Conv2D(
         48, kernel_size=(1, 1), padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),

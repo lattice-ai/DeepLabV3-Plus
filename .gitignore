@@ -9,3 +9,4 @@ assets/.DS_Store
 dataset/CamVid/
 src/datasets/__pycache__/
 dataset/camvid-secret.sh
+src/model/__pycache__/
