@@ -11,7 +11,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
 
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=1, padding='same',
-        kernel_initializer='he_normal'
+        kernel_initializer=tf.keras.initializers.he_normal()
     )(layer)
     layer = tf.keras.layers.BatchNormalization()(layer)
     layer = tf.keras.layers.ReLU()(layer)
@@ -27,7 +27,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=1,
         dilation_rate=1, padding='same',
-        kernel_initializer='he_normal',
+        kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
     layer = tf.keras.layers.BatchNormalization()(layer)
@@ -36,7 +36,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=6, padding='same',
-        kernel_initializer='he_normal',
+        kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
     layer = tf.keras.layers.BatchNormalization()(layer)
@@ -45,7 +45,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=12, padding='same',
-        kernel_initializer='he_normal',
+        kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
     layer = tf.keras.layers.BatchNormalization()(layer)
@@ -54,7 +54,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=18, padding='same',
-        kernel_initializer='he_normal',
+        kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
     layer = tf.keras.layers.BatchNormalization()(layer)
@@ -67,7 +67,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     layer = tf.keras.layers.Conv2D(
         256, kernel_size=1,
         dilation_rate=1, padding='same',
-        kernel_initializer='he_normal',
+        kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(layer)
     layer = tf.keras.layers.BatchNormalization()(layer)
