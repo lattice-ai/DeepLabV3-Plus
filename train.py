@@ -11,6 +11,7 @@ class Trainer:
 
     def __init__(self, configs):
         self.configs = configs
+        self.assert_configs()
 
         # Wandb Init
         os.environ['WANDB_API_KEY'] = WANDB_API_KEY
@@ -48,6 +49,21 @@ class Trainer:
             ),
             WandbCallback()
         ]
+
+    def assert_configs(self):
+        assert 'project_name' in self.configs
+        assert 'experiment_name' in self.configs
+        assert 'train_dataset_configs' in self.configs
+        assert 'val_dataset_configs' in self.configs
+        assert 'strategy' in self.configs
+        assert 'num_classes' in self.configs
+        assert 'height' in self.configs
+        assert 'width' in self.configs
+        assert 'backbone' in self.configs
+        assert 'learning_rate' in self.configs
+        assert 'checkpoint_path' in self.configs
+        assert 'batch_size' in self.configs
+        assert 'epochs' in self.configs
 
     def train(self):
         history = self.model.fit(
