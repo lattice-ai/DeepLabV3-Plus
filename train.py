@@ -31,14 +31,15 @@ class Trainer:
         self.val_dataset = val_dataloader.get_dataset()
         print('Val Dataset:', self.val_dataset)
 
-        self.model = DeeplabV3Plus(
-            self.configs['num_classes'], self.configs['height'],
-            self.configs['width'], self.configs['backbone']
-        )
-        self.model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=self.configs['learning_rate']),
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy']
-        )
+        with self.configs['strategy'].scope():
+            self.model = DeeplabV3Plus(
+                self.configs['num_classes'], self.configs['height'],
+                self.configs['width'], self.configs['backbone']
+            )
+            self.model.compile(
+                optimizer=tf.keras.optimizers.Adam(learning_rate=self.configs['learning_rate']),
+                loss=tf.keras.losses.SparseCategoricalCrossentropy(), metrics=['accuracy']
+            )
 
         self.callbacks = [
             tf.keras.callbacks.ModelCheckpoint(
