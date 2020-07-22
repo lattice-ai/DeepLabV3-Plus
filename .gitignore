@@ -10,3 +10,4 @@ dataset/CamVid/
 src/datasets/__pycache__/
 dataset/camvid-secret.sh
 src/model/__pycache__/
+secret.py
