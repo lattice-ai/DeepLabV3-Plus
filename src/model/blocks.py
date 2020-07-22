@@ -16,7 +16,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     x = tf.keras.layers.BatchNormalization()(x)
     x = tf.keras.layers.ReLU()(x)
 
-    out_pool = tf.keras.layers.UpSampling2D(
+    pool = tf.keras.layers.UpSampling2D(
         size=(
             dims[-3] // x.shape[1],
             dims[-2] // x.shape[2]
@@ -61,7 +61,7 @@ def AtrousSpatialPyramidPooling(input_tensor):
     out_18 = tf.keras.layers.ReLU()(x)
 
     x = tf.keras.layers.Concatenate(axis=-1)([
-        out_pool, out_1, out_6, out_12, out_18
+        pool, out_1, out_6, out_12, out_18
     ])
 
     x = tf.keras.layers.Conv2D(
