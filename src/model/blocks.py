@@ -5,71 +5,71 @@ from tensorflow.keras import backend as K
 def AtrousSpatialPyramidPooling(input_tensor):
     dims = K.int_shape(input_tensor)
 
-    layer = tf.keras.layers.AveragePooling2D(
+    x = tf.keras.layers.AveragePooling2D(
         pool_size=(dims[-3], dims[-2])
     )(input_tensor)
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=1, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal()
-    )(layer)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    layer = tf.keras.layers.ReLU()(layer)
+    )(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.ReLU()(x)
 
     out_pool = tf.keras.layers.UpSampling2D(
         size=(
-            dims[-3] // layer.shape[1],
-            dims[-2] // layer.shape[2]
+            dims[-3] // x.shape[1],
+            dims[-2] // x.shape[2]
         ),
         interpolation='bilinear'
-    )(layer)
+    )(x)
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=1,
         dilation_rate=1, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    out_1 = tf.keras.layers.ReLU()(layer)
+    x = tf.keras.layers.BatchNormalization()(x)
+    out_1 = tf.keras.layers.ReLU()(x)
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=6, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    out_6 = tf.keras.layers.ReLU()(layer)
+    x = tf.keras.layers.BatchNormalization()(x)
+    out_6 = tf.keras.layers.ReLU()(x)
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=12, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    out_12 = tf.keras.layers.ReLU()(layer)
+    x = tf.keras.layers.BatchNormalization()(x)
+    out_12 = tf.keras.layers.ReLU()(x)
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=3,
         dilation_rate=18, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
     )(input_tensor)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    out_18 = tf.keras.layers.ReLU()(layer)
+    x = tf.keras.layers.BatchNormalization()(x)
+    out_18 = tf.keras.layers.ReLU()(x)
 
-    layer = tf.keras.layers.Concatenate(axis=-1)([
+    x = tf.keras.layers.Concatenate(axis=-1)([
         out_pool, out_1, out_6, out_12, out_18
     ])
 
-    layer = tf.keras.layers.Conv2D(
+    x = tf.keras.layers.Conv2D(
         256, kernel_size=1,
         dilation_rate=1, padding='same',
         kernel_initializer=tf.keras.initializers.he_normal(),
         use_bias=False
-    )(layer)
-    layer = tf.keras.layers.BatchNormalization()(layer)
+    )(x)
+    x = tf.keras.layers.BatchNormalization()(x)
 
-    return tf.keras.layers.ReLU()(layer)
+    return tf.keras.layers.ReLU()(x)
