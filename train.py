@@ -1,5 +1,6 @@
 import os
 import wandb
+from glob import glob
 import tensorflow as tf
 from secret import WANDB_API_KEY
 from src.model import DeeplabV3Plus
@@ -12,13 +13,6 @@ class Trainer:
     def __init__(self, configs):
         self.configs = configs
         self.assert_configs()
-
-        # Wandb Init
-        os.environ['WANDB_API_KEY'] = WANDB_API_KEY
-        wandb.init(
-            project=self.configs['project_name'],
-            name=self.configs['experiment_name']
-        )
 
         # Train Dataset
         train_dataloader = HumanParsingDataset(self.configs['train_dataset_configs'])
@@ -62,14 +56,51 @@ class Trainer:
         assert 'backbone' in self.configs
         assert 'learning_rate' in self.configs
         assert 'checkpoint_path' in self.configs
-        assert 'batch_size' in self.configs
         assert 'epochs' in self.configs
+
+    def connect_wandb(self):
+        os.environ['WANDB_API_KEY'] = WANDB_API_KEY
+        wandb.init(
+            project=self.configs['project_name'],
+            name=self.configs['experiment_name']
+        )
 
     def train(self):
         history = self.model.fit(
             self.train_dataset, validation_data=self.val_dataset,
-            steps_per_epoch=len(self.val_dataset) // self.configs['batch_size'],
-            validation_steps=len(self.val_dataset) // self.configs['batch_size'],
+            steps_per_epoch=len(self.train_dataset) // self.configs['train_dataset_configs']['batch_size'],
+            validation_steps=len(self.val_dataset) // self.configs['val_dataset_configs']['batch_size'],
             epochs=self.configs['epochs'], callbacks=self.callbacks
         )
         return history
+
+
+if __name__ == '__main__':
+    config = {
+        'project_name': 'deeplabv3-plus',
+        'experiment_name': 'human-parsing-resnet-50-backbone',
+        'train_dataset_configs': {
+            'images': sorted(glob(
+                './dataset/instance-level_human_parsing/instance-level_human_parsing/Training/Images/*'
+            )),
+            'labels': sorted(glob(
+                './dataset/instance-level_human_parsing/instance-level_human_parsing/Training/Category_ids/*'
+            )),
+            'height': 512, 'width': 512, 'batch_size': 8
+        },
+        'val_dataset_configs': {
+            'images': sorted(glob(
+                './dataset/instance-level_human_parsing/instance-level_human_parsing/Validation/Images/*'
+            )),
+            'labels': sorted(glob(
+                './dataset/instance-level_human_parsing/instance-level_human_parsing/Validation/Category_ids/*'
+            )),
+            'height': 512, 'width': 512, 'batch_size': 8
+        },
+        'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
+        'num_classes': 20, 'height': 512, 'width': 512,
+        'backbone': 'resnet50', 'learning_rate': 0.0001,
+        'checkpoint_path': 'deeplabv3-plus-human-parsing-resnet-50-backbone.h5',
+        'epochs': 100
+    }
+    trainer = Trainer(config)
