@@ -1,6 +1,5 @@
-mkdir /root/.kaggle
-touch /root/.kaggle/kaggle.json
-chmod 600 /root/.kaggle/kaggle.json
+export KAGGLE_USERNAME=$1
+export KAGGLE_KEY=$2
 echo "{\"username\":\"<YOUR-USERNAME>\",\"key\":\"<YOUR-KAGGLE-KEY>\"}" > /root/.kaggle/kaggle.json
 kaggle datasets download -d jcoral02/camvid
 unzip -q ./camvid.zip
