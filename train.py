@@ -3,8 +3,8 @@ import wandb
 from glob import glob
 import tensorflow as tf
 from secret import WANDB_API_KEY
-from src.model import DeeplabV3Plus
 from wandb.keras import WandbCallback
+from src.model.deeplabv3_plus import DeeplabV3Plus
 from src.datasets.human_parsing import HumanParsingDataset
 
 
