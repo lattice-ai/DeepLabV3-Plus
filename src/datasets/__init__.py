@@ -40,10 +40,11 @@ class GenericDataset:
             self._map_function,
             num_parallel_calls=tf.data.experimental.AUTOTUNE
         )
-        dataset = dataset.map(
-            self.configs['augment_compose_function'],
-            num_parallel_calls=tf.data.experimental.AUTOTUNE
-        )
+        if self.configs['augment_compose_function'] is not None:
+            dataset = dataset.map(
+                self.configs['augment_compose_function'],
+                num_parallel_calls=tf.data.experimental.AUTOTUNE
+            )
         dataset = dataset.batch(self.configs['batch_size'], drop_remainder=True)
         dataset = dataset.repeat()
         dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
