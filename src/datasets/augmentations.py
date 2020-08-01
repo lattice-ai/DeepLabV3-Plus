@@ -43,8 +43,8 @@ class Augmentation:
         )
         image = tf.cond(
             condition, lambda: tf.image.random_saturation(
-            image, self.configs['random_contrast_lower_bound'],
-                self.configs['random_contrast_upper_bound']
+            image, self.configs['random_saturation_lower_bound'],
+                self.configs['random_saturation_upper_bound']
             ), lambda: tf.identity(image)
         )
         return image, mask
