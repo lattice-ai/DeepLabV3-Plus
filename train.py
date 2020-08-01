@@ -84,9 +84,9 @@ class Trainer:
 
 if __name__ == '__main__':
     config = {
-        'wandb_api_key': 'kjbckajsbdksjbdkajsbkdasbkdj',
+        'wandb_api_key': 'kkjhkkhhggygyggi',
         'project_name': 'deeplabv3-plus',
-        'experiment_name': 'human-parsing-resnet-50-backbone',
+        'experiment_name': 'camvid-resnet-50-backbone',
         'train_dataset_configs': {
             'images': sorted(glob(
                 './dataset/CamVid/train/*'
@@ -114,12 +114,13 @@ if __name__ == '__main__':
             'labels': sorted(glob(
                 './dataset/CamVid/val_labels/*'
             )),
-            'batch_size': 8
+            'batch_size': 8, 'image_size': (512, 512),
+            'augment_compose_function': None
         },
         'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
         'num_classes': 20, 'height': 512, 'width': 512,
         'backbone': 'resnet50', 'learning_rate': 0.0001,
-        'checkpoint_path': 'deeplabv3-plus-human-parsing-resnet-50-backbone.h5',
+        'checkpoint_path': 'deeplabv3-plus-camvid-resnet-50-backbone.h5',
         'epochs': 100
     }
     trainer = Trainer(config)
