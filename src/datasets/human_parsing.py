@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-class HumanParsingDataset:
+class GenericDataset:
 
     def __init__(self, configs):
         self.configs = configs
@@ -20,22 +20,10 @@ class HumanParsingDataset:
         if mask:
             image = tf.image.decode_png(image, channels=1)
             image.set_shape([None, None, 1])
-            image = (tf.image.resize(
-                images=image, size=[
-                    self.configs['height'],
-                    self.configs['width']
-                ]
-            ))
             image = tf.cast(image, tf.float32)
         else:
             image = tf.image.decode_png(image, channels=3)
             image.set_shape([None, None, 3])
-            image = (tf.image.resize(
-                images=image, size=[
-                    self.configs['height'],
-                    self.configs['width']
-                ]
-            ))
             image = tf.cast(image, tf.float32) / 127.5 - 1
         return image
 
@@ -48,7 +36,14 @@ class HumanParsingDataset:
         dataset = tf.data.Dataset.from_tensor_slices(
             (self.configs['images'], self.configs['labels'])
         )
-        dataset = dataset.map(self._map_function, num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        dataset = dataset.map(
+            self._map_function,
+            num_parallel_calls=tf.data.experimental.AUTOTUNE
+        )
+        dataset = dataset.map(
+            self.configs['augment_compose_function'],
+            num_parallel_calls=tf.data.experimental.AUTOTUNE
+        )
         dataset = dataset.batch(self.configs['batch_size'], drop_remainder=True)
         dataset = dataset.repeat()
         dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
