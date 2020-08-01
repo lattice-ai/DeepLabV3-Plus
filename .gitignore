@@ -1,6 +1,7 @@
 .idea/
 env/
 test.py
+.vscode/
 src/backbones/__pycache__/
 dump.txt
 src/__pycache__/
@@ -11,3 +12,6 @@ src/datasets/__pycache__/
 dataset/camvid-secret.sh
 src/model/__pycache__/
 secret.py
+__pycache__/
+src/.ipynb_checkpoints/
+.ipynb_checkpoints/
