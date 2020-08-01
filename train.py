@@ -83,17 +83,6 @@ class Trainer:
 
 
 if __name__ == '__main__':
-    augmentation = Augmentation(
-        configs={
-            'random_brightness_max_delta': 0.1,
-            'random_contrast_lower_bound': 0.1,
-            'random_contrast_upper_bound': 0.8,
-            'random_saturation_lower_bound': 0.1,
-            'random_saturation_upper_bound': 0.8,
-            'seed': 47, 'image_channels': 3, 'label_channels': 1,
-            'image_size': (512, 512), 'crop_percent': 0.9,
-        }
-    )
     config = {
         'wandb_api_key': 'kjbckajsbdksjbdkajsbkdasbkdj',
         'project_name': 'deeplabv3-plus',
@@ -106,7 +95,17 @@ if __name__ == '__main__':
                 './dataset/CamVid/train_labels/*'
             )),
             'batch_size': 8,
-            'augment_compose_function': augmentation.compose_sequential
+            'augment_compose_function': Augmentation(
+                configs={
+                    'random_brightness_max_delta': 0.1,
+                    'random_contrast_lower_bound': 0.1,
+                    'random_contrast_upper_bound': 0.8,
+                    'random_saturation_lower_bound': 0.1,
+                    'random_saturation_upper_bound': 0.8,
+                    'seed': 47, 'image_channels': 3, 'label_channels': 1,
+                    'image_size': (512, 512), 'crop_percent': 0.9,
+                }
+            ).compose_sequential
         },
         'val_dataset_configs': {
             'images': sorted(glob(
