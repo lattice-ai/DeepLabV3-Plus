@@ -26,6 +26,11 @@ class GenericDataset:
             image.set_shape([None, None, 3])
             image = tf.cast(image, tf.float32) / 127.5 - 1
         return image
+    
+    def apply_resize(self, image, mask):
+        image = tf.image.resize(image, self.configs['image_size'])
+        mask = tf.image.resize(mask, self.configs['image_size'], method="nearest")
+        return image, mask
 
     def _map_function(self, image_list, mask_list):
         image = self.read_img(image_list)
@@ -43,6 +48,11 @@ class GenericDataset:
         if self.configs['augment_compose_function'] is not None:
             dataset = dataset.map(
                 self.configs['augment_compose_function'],
+                num_parallel_calls=tf.data.experimental.AUTOTUNE
+            )
+        else:
+            dataset = dataset.map(
+                self.apply_resize,
                 num_parallel_calls=tf.data.experimental.AUTOTUNE
             )
         dataset = dataset.batch(self.configs['batch_size'], drop_remainder=True)
