@@ -84,7 +84,7 @@ class Trainer:
 
 if __name__ == '__main__':
     config = {
-        'wandb_api_key': 'kkjhkkhhggygyggi',
+        'wandb_api_key': '60cfb770bc5de44f181c8cb5e270eb266bc918c6',
         'project_name': 'deeplabv3-plus',
         'experiment_name': 'camvid-resnet-50-backbone',
         'train_dataset_configs': {
@@ -97,6 +97,7 @@ if __name__ == '__main__':
             'batch_size': 8,
             'augment_compose_function': Augmentation(
                 configs={
+                    'pallette': None,
                     'random_brightness_max_delta': 0.1,
                     'random_contrast_lower_bound': 0.1,
                     'random_contrast_upper_bound': 0.8,

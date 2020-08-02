@@ -100,6 +100,15 @@ class Augmentation:
         )
         return image, mask
     
+    def apply_one_hot_encoding(self, image, mask):
+        one_hot_map = []
+        for colour in self.configs['palette']:
+            class_map = tf.reduce_all(tf.equal(mask, colour), axis=-1)
+            one_hot_map.append(class_map)
+        one_hot_map = tf.stack(one_hot_map, axis=-1)
+        one_hot_map = tf.cast(one_hot_map, tf.float32)
+        return image, mask, one_hot_map
+    
     def compose_sequential(self, image, mask):
         image, mask = self.apply_random_brightness(image, mask)
         image, mask = self.apply_random_contrast(image, mask)
@@ -108,6 +117,10 @@ class Augmentation:
         image, mask = self.apply_horizontal_flip(image, mask)
         image, mask = self.apply_vertical_flip(image, mask)
         image, mask = self.apply_resize(image, mask)
+        if self.configs['palette'] is not None:
+            image, mask, _ = self.apply_one_hot_encoding(image, mask)
+            if self.configs['convert_to_segmap']:
+                mask = tf.math.argmax(mask, axis=-1)
         return image, mask
     
     @tf.function
