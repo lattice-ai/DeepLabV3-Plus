@@ -2,6 +2,19 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 
 
+def ConvBlock(
+    x, n_filters, kernel_size, padding,
+    dilation_rate, kernel_initializer, use_bias=True):
+    x = tf.keras.layers.Conv2D(
+        n_filters, kernel_size=kernel_size, padding=padding,
+        kernel_initializer=kernel_initializer, use_bias=use_bias,
+        dilation_rate=dilation_rate
+    )(x)
+    x = tf.keras.layers.BatchNormalization()(x)
+    x = tf.keras.layers.ReLU()(x)
+    return x
+
+
 def AtrousSpatialPyramidPooling(input_tensor):
     dims = K.int_shape(input_tensor)
 
@@ -9,12 +22,10 @@ def AtrousSpatialPyramidPooling(input_tensor):
         pool_size=(dims[-3], dims[-2])
     )(input_tensor)
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=1, padding='same',
+    x = ConvBlock(
+        x, 256, kernel_size=1, padding='same',dilation_rate=1,
         kernel_initializer=tf.keras.initializers.he_normal()
-    )(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.ReLU()(x)
+    )
 
     pool = tf.keras.layers.UpSampling2D(
         size=(
@@ -24,52 +35,37 @@ def AtrousSpatialPyramidPooling(input_tensor):
         interpolation='bilinear'
     )(x)
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=1,
-        dilation_rate=1, padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(input_tensor)
-    x = tf.keras.layers.BatchNormalization()(x)
-    out_1 = tf.keras.layers.ReLU()(x)
+    out_1 = ConvBlock(
+        input_tensor, 256, kernel_size=1,
+        dilation_rate=1, padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal()
+    )
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=3,
-        dilation_rate=6, padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(input_tensor)
-    x = tf.keras.layers.BatchNormalization()(x)
-    out_6 = tf.keras.layers.ReLU()(x)
+    out_6 = ConvBlock(
+        input_tensor, 256, kernel_size=3,
+        dilation_rate=6, padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal()
+    )
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=3,
-        dilation_rate=12, padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(input_tensor)
-    x = tf.keras.layers.BatchNormalization()(x)
-    out_12 = tf.keras.layers.ReLU()(x)
+    out_12 = ConvBlock(
+        input_tensor, 256, kernel_size=3,
+        dilation_rate=12, padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal()
+    )
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=3,
-        dilation_rate=18, padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(input_tensor)
-    x = tf.keras.layers.BatchNormalization()(x)
-    out_18 = tf.keras.layers.ReLU()(x)
+    out_18 = ConvBlock(
+        input_tensor, 256, kernel_size=3,
+        dilation_rate=18, padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal()
+    )
 
     x = tf.keras.layers.Concatenate(axis=-1)([
         pool, out_1, out_6, out_12, out_18
     ])
 
-    x = tf.keras.layers.Conv2D(
-        256, kernel_size=1,
-        dilation_rate=1, padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-
-    return tf.keras.layers.ReLU()(x)
+    x = ConvBlock(
+        x, 256, kernel_size=1,
+        dilation_rate=1, padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal()
+    )
+    return x
