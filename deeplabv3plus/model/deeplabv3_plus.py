@@ -1,16 +1,16 @@
 import tensorflow as tf
 from .backbones import BACKBONES
-from .blocks import AtrousSpatialPyramidPooling
+from .blocks import AtrousSpatialPyramidPooling, ConvBlock
 
 
 def DeeplabV3Plus(num_classes, height, width, backbone='resnet50'):
     model_input = tf.keras.Input(shape=(height, width, 3))
-    resnet50 = BACKBONES[backbone]['model'](
+    backbone_model = BACKBONES[backbone]['model'](
         weights='imagenet',
         include_top=False,
         input_tensor=model_input
     )
-    layer = resnet50.get_layer(BACKBONES[backbone]['feature_1']).output
+    layer = backbone_model.get_layer(BACKBONES[backbone]['feature_1']).output
     layer = AtrousSpatialPyramidPooling(layer)
     input_a = tf.keras.layers.UpSampling2D(
         size=(
@@ -20,29 +20,24 @@ def DeeplabV3Plus(num_classes, height, width, backbone='resnet50'):
         interpolation='bilinear'
     )(layer)
 
-    input_b = resnet50.get_layer(BACKBONES[backbone]['feature_2']).output
-    input_b = tf.keras.layers.Conv2D(
-        48, kernel_size=(1, 1), padding='same',
-        kernel_initializer=tf.keras.initializers.he_normal(),
-        use_bias=False
-    )(input_b)
-    input_b = tf.keras.layers.BatchNormalization()(input_b)
-    input_b = tf.keras.layers.ReLU()(input_b)
+    input_b = backbone_model.get_layer(BACKBONES[backbone]['feature_2']).output
+    input_b = ConvBlock(
+        input_b, 48, kernel_size=(1, 1), padding='same', use_bias=False,
+        kernel_initializer=tf.keras.initializers.he_normal(), dilation_rate=1
+    )
 
     layer = tf.keras.layers.Concatenate(axis=-1)([input_a, input_b])
 
-    layer = tf.keras.layers.Conv2D(
-        256, kernel_size=3, padding='same', activation='relu',
-        kernel_initializer=tf.keras.initializers.he_normal(), use_bias=False
-    )(layer)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    layer = tf.keras.layers.ReLU()(layer)
-    layer = tf.keras.layers.Conv2D(
-        256, kernel_size=3, padding='same', activation='relu',
-        kernel_initializer=tf.keras.initializers.he_normal(), use_bias=False
-    )(layer)
-    layer = tf.keras.layers.BatchNormalization()(layer)
-    layer = tf.keras.layers.ReLU()(layer)
+    layer = ConvBlock(
+        layer, 256, kernel_size=3, padding='same', conv_activation='relu',
+        kernel_initializer=tf.keras.initializers.he_normal(), use_bias=False, dilation_rate=1
+    )
+
+    layer = ConvBlock(
+        layer, 256, kernel_size=3, padding='same', conv_activation='relu',
+        kernel_initializer=tf.keras.initializers.he_normal(), use_bias=False, dilation_rate=1
+    )
+
     layer = tf.keras.layers.UpSampling2D(
         size=(
             height // layer.shape[1],
@@ -51,7 +46,9 @@ def DeeplabV3Plus(num_classes, height, width, backbone='resnet50'):
         interpolation='bilinear'
     )(layer)
     model_output = tf.keras.layers.Conv2D(
-        num_classes, kernel_size=(1, 1),
-        padding='same'
+        num_classes, kernel_size=(1, 1), padding='same'
     )(layer)
-    return tf.keras.Model(inputs=model_input, outputs=model_output)
+
+    model = tf.keras.Model(inputs=model_input, outputs=model_output)
+
+    return model

@@ -2,17 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import backend as K
 
 
-def ConvBlock(
-    x, n_filters, kernel_size, padding,
-    dilation_rate, kernel_initializer, use_bias=True):
-    x = tf.keras.layers.Conv2D(
-        n_filters, kernel_size=kernel_size, padding=padding,
-        kernel_initializer=kernel_initializer, use_bias=use_bias,
-        dilation_rate=dilation_rate
-    )(x)
-    x = tf.keras.layers.BatchNormalization()(x)
-    x = tf.keras.layers.ReLU()(x)
-    return x
+ 
 
 
 def AtrousSpatialPyramidPooling(input_tensor):
