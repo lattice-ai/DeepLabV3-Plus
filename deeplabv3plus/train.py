@@ -3,8 +3,8 @@ import wandb
 from glob import glob
 import tensorflow as tf
 from wandb.keras import WandbCallback
-from deeplabv3plus.datasets import GenericDataLoader
-from deeplabv3plus.model import DeeplabV3Plus
+from .datasets import GenericDataLoader
+from .model import DeeplabV3Plus
 
 
 class Trainer:
