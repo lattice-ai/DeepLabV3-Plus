@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-class HumanParsingDataset:
+class GenericDataLoader:
 
     def __init__(self, configs):
         self.configs = configs

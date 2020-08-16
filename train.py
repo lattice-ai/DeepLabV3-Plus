@@ -3,8 +3,8 @@ import wandb
 from glob import glob
 import tensorflow as tf
 from wandb.keras import WandbCallback
+from src.datasets import GenericDataLoader
 from src.model.deeplabv3_plus import DeeplabV3Plus
-from src.datasets.human_parsing import HumanParsingDataset
 
 
 class Trainer:
@@ -14,14 +14,14 @@ class Trainer:
         self.assert_configs()
 
         # Train Dataset
-        train_dataloader = HumanParsingDataset(self.configs['train_dataset_configs'])
+        train_dataloader = GenericDataLoader(self.configs['train_dataset_configs'])
         self.train_data_length = len(train_dataloader)
         print('Data points in train dataset: {}'.format(self.train_data_length))
         self.train_dataset = train_dataloader.get_dataset()
         print('Train Dataset:', self.train_dataset)
 
         # Validation Dataset
-        val_dataloader = HumanParsingDataset(self.configs['val_dataset_configs'])
+        val_dataloader = GenericDataLoader(self.configs['val_dataset_configs'])
         self.val_data_length = len(val_dataloader)
         print('Data points in train dataset: {}'.format(self.val_data_length))
         self.val_dataset = val_dataloader.get_dataset()
