@@ -17,24 +17,7 @@ Model Architectures can be found [here](./models.md).
 
 ## Setup Datasets
 
-- **Cityscapes**
-
-    Register on [https://www.cityscapes-dataset.com/](https://www.cityscapes-dataset.com/).
-
-    Edit `dataset/cityscapes.sh` and put in your username and password.
-
-    ```shell script
-    cd dataset
-    bash cityscapes.sh
-    ```
-
 - **CamVid**
-    
-    Register on [https://www.kaggle.com/](https://www.kaggle.com/).
-    
-    Generate Kaggle API Token
-    
-    Edit `dataset/camvid.sh` and put in your kaggle username and kaggle key.
     
     ```shell script
     cd dataset
