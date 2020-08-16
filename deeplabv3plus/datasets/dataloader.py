@@ -24,7 +24,7 @@ class GenericDataLoader:
                 images=image, size=[
                     self.configs['height'],
                     self.configs['width']
-                ]
+                ], method="nearest"
             ))
             image = tf.cast(image, tf.float32)
         else:
