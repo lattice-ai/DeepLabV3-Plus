@@ -1,6 +1,3 @@
-export KAGGLE_USERNAME=$1
-export KAGGLE_KEY=$2
-echo "{\"username\":\"<YOUR-USERNAME>\",\"key\":\"<YOUR-KAGGLE-KEY>\"}" > /root/.kaggle/kaggle.json
-kaggle datasets download -d jcoral02/camvid
-unzip -q ./camvid.zip
-rm ./camvid.zip
+wget https://www.dropbox.com/s/ej1gx48bxqbtwd2/CamVid.zip?dl=0 -O CamVid.zip
+unzip -qq CamVid.zip
+rm CamVid.zip
