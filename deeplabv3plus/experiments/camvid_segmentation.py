@@ -7,7 +7,7 @@ def run_training():
     config = {
         'wandb_api_key': 'kjbckajsbdksjbdkajsbkdasbkdj',
         'project_name': 'deeplabv3-plus',
-        'experiment_name': 'human-parsing-resnet-50-backbone',
+        'experiment_name': 'camvid-segmentation-resnet-50-backbone',
         'train_dataset_configs': {
             'images': sorted(glob('./camvid/train/*')),
             'labels': sorted(glob('./camvid/trainannot/*')),
@@ -23,7 +23,7 @@ def run_training():
         'backbone': 'resnet50', 'learning_rate': 0.0001,
         'checkpoint_path': os.path.join(
             wandb.run.dir,
-            'deeplabv3-plus-human-parsing-resnet-50-backbone.h5'
+            'deeplabv3-plus-camvid-segmentation-resnet-50-backbone.h5'
         ),
         'epochs': 100
     }
