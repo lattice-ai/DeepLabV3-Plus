@@ -12,7 +12,7 @@ def run_training():
         'train_dataset_configs': {
             'images': sorted(glob('./dataset/camvid/train/*')),
             'labels': sorted(glob('./dataset/camvid/trainannot/*')),
-            'height': 360, 'width': 480, 'batch_size': 8
+            'height': 512, 'width': 512, 'batch_size': 8
         },
         'val_dataset_configs': {
             'images': sorted(glob('./dataset/camvid/val/*')),
