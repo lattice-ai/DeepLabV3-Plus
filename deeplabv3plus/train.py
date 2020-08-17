@@ -62,14 +62,14 @@ class Trainer:
         callbacks = [
             tf.keras.callbacks.ModelCheckpoint(
                 self.configs['checkpoint_path'],
-                monitor='loss', save_best_only=True,
+                monitor='val_loss', save_best_only=True,
                 mode='min', save_weights_only=True
             )
         ]
         try:
-            self.callbacks.append(WandbCallback())
+            callbacks.append(WandbCallback())
         except:
-            self.callbacks.append(
+            callbacks.append(
                 tf.keras.callbacks.TensorBoard(log_dir='logs')
             )
         history = self.model.fit(
