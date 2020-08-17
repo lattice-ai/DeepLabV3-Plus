@@ -1,6 +1,5 @@
 import os
 import wandb
-from glob import glob
 import tensorflow as tf
 from wandb.keras import WandbCallback
 from .datasets import GenericDataLoader
@@ -60,7 +59,7 @@ class Trainer:
         )
 
     def train(self):
-        self.callbacks = [
+        callbacks = [
             tf.keras.callbacks.ModelCheckpoint(
                 self.configs['checkpoint_path'],
                 monitor='loss', save_best_only=True,
@@ -77,6 +76,6 @@ class Trainer:
             self.train_dataset, validation_data=self.val_dataset,
             steps_per_epoch=self.train_data_length // self.configs['train_dataset_configs']['batch_size'],
             validation_steps=self.val_data_length // self.configs['val_dataset_configs']['batch_size'],
-            epochs=self.configs['epochs'], callbacks=self.callbacks
+            epochs=self.configs['epochs'], callbacks=callbacks
         )
         return history
