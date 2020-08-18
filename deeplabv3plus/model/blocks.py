@@ -103,13 +103,13 @@ class AtrousSpatialPyramidPooling(tf.keras.layers.Layer):
         tensor = self.conv1(tensor)
         tensor = tf.keras.layers.Concatenate(axis=-1)([
             self.pool(tensor),
-            self.out1(tensor),
-            self.out6(tensor),
+            self.out1(inputs),
+            self.out6(inputs),
             self.out12(
-                tensor
+                inputs
             ),
             self.out18(
-                tensor
+                inputs
             )
         ])
         tensor = self.conv2(tensor)
