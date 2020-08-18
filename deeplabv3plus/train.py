@@ -48,7 +48,7 @@ class Trainer:
         assert 'width' in self.configs
         assert 'backbone' in self.configs
         assert 'learning_rate' in self.configs
-        assert 'checkpoint_path' in self.configs
+        assert 'checkpoint_path_getter' in self.configs
         assert 'epochs' in self.configs
 
     def connect_wandb(self):
@@ -61,7 +61,7 @@ class Trainer:
     def train(self):
         callbacks = [
             tf.keras.callbacks.ModelCheckpoint(
-                self.configs['checkpoint_path'],
+                self.configs['checkpoint_path_getter'](),
                 monitor='val_loss', save_best_only=True,
                 mode='min', save_weights_only=True
             )
