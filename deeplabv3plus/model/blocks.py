@@ -1,6 +1,7 @@
 """Module providing building blocks for the DeepLabV3+ netowork architecture.
 """
 
+from typing import Tuple
 import tensorflow as tf
 
 
@@ -88,10 +89,12 @@ class AtrousSpatialPyramidPooling(tf.keras.layers.Layer):
                 input_shape[-2] // dummy_tensor.shape[2]
             ),
             interpolation='bilinear'
-        )
+        ) 
 
         self.out1, self.out6, self.out12, self.out18 = map(
-            AtrousSpatialPyramidPooling._get_conv_block,
+            lambda tup: AtrousSpatialPyramidPooling._get_conv_block(
+                kernel_size=tup[0], dilation_rate=tup[1]
+            ),
             [(1, 1), (3, 6), (3, 12), (3, 18)]
         )
 
