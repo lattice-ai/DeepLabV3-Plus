@@ -11,7 +11,6 @@ from .blocks import (AtrousSpatialPyramidPooling,
 # !pylint:disable=too-many-ancestors, too-many-instance-attributes
 class DeeplabV3Plus(tf.keras.Model):
     """DeeplabV3+ network architecture provider tf.keras.Model implementation.
-
     Args:
         num_classes:
             number of segmentation classes, effectively - number of output
@@ -21,82 +20,89 @@ class DeeplabV3Plus(tf.keras.Model):
         backbone:
             backbone to be used
     """
-    def __init__(self, num_classes, height, width, backbone='resnet50'):
+    def __init__(self, num_classes, backbone='resnet50', **kwargs):
         super(DeeplabV3Plus, self).__init__()
 
         self.num_classes = num_classes
-        self.height, self.width = height, width
         self.backbone = backbone
         self.aspp = None
-        self.input_b_conv, self.conv1, self.conv2 = None, None, None
-        self.out_conv = None
+        self.backbone_feature_1, self.backbone_feature_2 = None, None
+        self.input_a_upsampler_getter = None
+        self.otensor_upsampler_getter = None
+        self.input_b_conv, self.conv1, self.conv2, self.out_conv = (None,
+                                                                    None,
+                                                                    None,
+                                                                    None)
 
-        self._built = False
+    @staticmethod
+    def _get_conv_block(filters, kernel_size, conv_activation=None):
+        return ConvBlock(filters, kernel_size=kernel_size, padding='same',
+                         conv_activation=conv_activation,
+                         kernel_initializer=tf.keras.initializers.he_normal(),
+                         use_bias=False, dilation_rate=1)
 
-    def _build(self):
-        if self._built:
-            return
+    @staticmethod
+    def _get_upsample_layer_fn(input_shape, factor: int):
+        return lambda fan_in_shape: \
+            tf.keras.layers.UpSampling2D(
+                size=(
+                    input_shape[1]
+                    // factor // fan_in_shape[1],
+                    input_shape[2]
+                    // factor // fan_in_shape[2]
+                ),
+                interpolation='bilinear'
+            )
 
-        self._built = True
+    def _get_backbone_feature(self, feature: str,
+                              input_shape) -> tf.keras.Model:
+        input_layer = tf.keras.Input(shape=input_shape[1:])
+
+        backbone_model = BACKBONES[self.backbone]['model'](
+            input_tensor=input_layer, weights='imagenet', include_top=False)
+
+        output_layer = backbone_model.get_layer(
+            BACKBONES[self.backbone][feature]).output
+        return tf.keras.Model(inputs=input_layer, outputs=output_layer)
+
+    def build(self, input_shape):
+        self.backbone_feature_1 = self._get_backbone_feature('feature_1',
+                                                             input_shape)
+        self.backbone_feature_2 = self._get_backbone_feature('feature_2',
+                                                             input_shape)
+
+        self.input_a_upsampler_getter = self._get_upsample_layer_fn(
+            input_shape, factor=4)
 
         self.aspp = AtrousSpatialPyramidPooling()
 
-        self.input_b_conv = ConvBlock(
-            48, kernel_size=(1, 1), padding='same',
-            kernel_initializer=tf.keras.initializers.he_normal(),
-            use_bias=False, dilation_rate=1)
+        self.input_b_conv = DeeplabV3Plus._get_conv_block(48,
+                                                          kernel_size=(1, 1))
 
-        self.conv1 = ConvBlock(
-            256, kernel_size=3, padding='same', conv_activation='relu',
-            kernel_initializer=tf.keras.initializers.he_normal(),
-            use_bias=False, dilation_rate=1)
+        self.conv1 = DeeplabV3Plus._get_conv_block(256, kernel_size=3,
+                                                   conv_activation='relu')
 
-        self.conv2 = ConvBlock(
-            256, kernel_size=3, padding='same', conv_activation='relu',
-            kernel_initializer=tf.keras.initializers.he_normal(),
-            use_bias=False, dilation_rate=1)
+        self.conv2 = DeeplabV3Plus._get_conv_block(256, kernel_size=3,
+                                                   conv_activation='relu')
+
+        self.otensor_upsampler_getter = self._get_upsample_layer_fn(
+            input_shape, factor=1)
 
         self.out_conv = tf.keras.layers.Conv2D(self.num_classes,
                                                kernel_size=(1, 1),
                                                padding='same')
 
     def call(self, inputs, training=None, mask=None):
-        self._build()
+        input_a = self.backbone_feature_1(inputs)
 
-        inputs = tf.keras.Input(shape=(self.height, self.width, 3),
-                                tensor=inputs)
+        input_a = self.aspp(input_a)
+        input_a = self.input_a_upsampler_getter(input_a.shape)(input_a)
 
-        backbone_model = BACKBONES[self.backbone]['model'](
-            weights='imagenet', input_tensor=inputs)
-
-        tensor = backbone_model.get_layer(
-            BACKBONES[self.backbone]['feature_1']).output
-        tensor = self.aspp(tensor)
-
-        input_a = tf.keras.layers.UpSampling2D(
-            size=(
-                self.height
-                // 4 // tensor.shape[1],
-                self.width
-                // 4 // tensor.shape[2]
-            ),
-            interpolation='bilinear'
-        )(tensor)
-
-        input_b = backbone_model.get_layer(
-            BACKBONES[self.backbone]['feature_2']).output
+        input_b = self.backbone_feature_2(inputs)
         input_b = self.input_b_conv(input_b)
 
         tensor = tf.keras.layers.Concatenate(axis=-1)([input_a, input_b])
         tensor = self.conv2(self.conv1(tensor))
 
-        tensor = tf.keras.layers.UpSampling2D(
-            size=(
-                self.height
-                // tensor.shape[1],
-                self.width
-                // tensor.shape[2]
-            ),
-            interpolation='bilinear'
-        )
+        tensor = self.otensor_upsampler_getter(tensor.shape)(tensor)
         return self.out_conv(tensor)
