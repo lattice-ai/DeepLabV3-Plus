@@ -54,32 +54,46 @@ python3 train.py
 If you want to use a custom configuration, you can define it in the following way:
 
 ```python
+#!/usr/bin/env python
+import os
 from glob import glob
+
 import tensorflow as tf
-from train import Trainer
+
+import wandb
+
+from deeplabv3plus.train import Trainer
+
 
 # Sample Configuration
 config = {
-    'wandb_api_key': 'kjbckajsbdksjbdkajsbkdasbkdj',
+    'wandb_api_key': 'xxxx-your_wandb_api_key-xxxx',
     'project_name': 'deeplabv3-plus',
     'experiment_name': 'camvid-segmentation-resnet-50-backbone',
+
     'train_dataset_configs': {
-        'images': sorted(glob('./camvid/train/*')),
-        'labels': sorted(glob('./camvid/trainannot/*')),
+        'images': sorted(glob('./dataset/camvid/train/*')),
+        'labels': sorted(glob('./dataset/camvid/trainannot/*')),
         'height': 360, 'width': 480, 'batch_size': 8
     },
+
     'val_dataset_configs': {
-        'images': sorted(glob('./camvid/val/*')),
-        'labels': sorted(glob('./camvid/valannot/*')),
+        'images': sorted(glob('./dataset/camvid/val/*')),
+        'labels': sorted(glob('./dataset/camvid/valannot/*')),
         'height': 512, 'width': 512, 'batch_size': 8
     },
+
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
     'num_classes': 20, 'height': 360, 'width': 480,
     'backbone': 'resnet50', 'learning_rate': 0.0001,
-    'checkpoint_path': os.path.join(
+
+    # Lambda for obtaining checkpoint lazily
+    # replace os.path.join(...) with your checkpoint path
+    'checkpoint_path_getter': lambda: os.path.join(
         wandb.run.dir,
         'deeplabv3-plus-camvid-segmentation-resnet-50-backbone.h5'
     ),
+
     'epochs': 100
 }
 
@@ -90,7 +104,7 @@ history = trainer.train()
 
 ## Inference
 
-Sample Inferece Code:
+Sample Inference Code:
 
 ```python
 model_file = './dataset/deeplabv3-plus-human-parsing-resnet-50-backbone.h5'
