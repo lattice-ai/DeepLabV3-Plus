@@ -18,7 +18,7 @@ config = {
     'train_dataset_configs': {
         'images': sorted(glob('./dataset/camvid/train/*')),
         'labels': sorted(glob('./dataset/camvid/trainannot/*')),
-        'height': 360, 'width': 480, 'batch_size': 8
+        'height': 512, 'width': 512, 'batch_size': 8
     },
     
     'val_dataset_configs': {
@@ -28,7 +28,7 @@ config = {
     },
     
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
-    'num_classes': 20, 'height': 360, 'width': 480,
+    'num_classes': 20, 'height': 512, 'width': 512,
     'backbone': 'resnet50', 'learning_rate': 0.0001,
     
     # Lambda for obtaining checkpoint lazily
