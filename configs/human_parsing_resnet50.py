@@ -5,8 +5,6 @@ from glob import glob
 
 import tensorflow as tf
 
-# !pylint:disable=line-too-long
-
 
 CONFIG = {
     'wandb_api_key': 'xxxx-your_wandb_api_key-xxxx',
