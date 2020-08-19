@@ -28,8 +28,10 @@ class Trainer:
 
         with self.configs['strategy'].scope():
             self.model = DeeplabV3Plus(
-                self.configs['num_classes'], self.configs['height'],
-                self.configs['width'], self.configs['backbone']
+                num_classes=self.configs['num_classes'],
+                backbone=self.configs['backbone'],
+                height=self.configs['height'],
+                width=self.configs['width'],
             )
             self.model.compile(
                 optimizer=tf.keras.optimizers.Adam(learning_rate=self.configs['learning_rate']),
