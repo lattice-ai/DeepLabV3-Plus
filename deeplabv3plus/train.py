@@ -150,7 +150,7 @@ class Trainer:
             return tf.keras.callbacks.TensorBoard()
 
         try:
-            return WandbCallback()
+            return WandbCallback(save_weights_only=True, save_model=False)
         except wandb.Error as error:
             if 'wandb_api_key' in self.config:
                 raise error  # rethrow
@@ -173,7 +173,7 @@ class Trainer:
                 monitor='val_loss',
                 save_best_only=True,
                 mode='min',
-                save_weights_only=False
+                save_weights_only=True
             ),
 
             self._get_logger_callback()
