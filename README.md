@@ -46,60 +46,101 @@ model.summary()
 
 ## Training
 
+Use the trainer.py script as documented with the help description below:
 ```shell script
-wandb login <login-key>
-python3 train.py
+usage: trainer.py [-h] [--wandb_api_key WANDB_API_KEY] config_key
+
+Runs DeeplabV3+ trainer with the given config setting.
+
+Registered config_key values:
+  camvid_resnet50
+  human_parsing_resnet50
+
+positional arguments:
+  config_key            Key to use while looking up configuration from the CONFIG_MAP dictionary.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --wandb_api_key WANDB_API_KEY
+                        Wandb API Key for logging run on Wandb.
+                        If provided, checkpoint_dir is set to wandb://
+                        (Model checkpoints are saved to wandb.)
 ```
 
-If you want to use a custom configuration, you can define it in the following way:
+### If you want to use your own custom training configuration, you can define it in the following way:
+
+- #### Define your configuration in a python dictionary as follows:
+`config/camvid_resnet50.py`
 
 ```python
 #!/usr/bin/env python
-import os
+
+"""Module for training deeplabv3plus on camvid dataset."""
+
 from glob import glob
 
 import tensorflow as tf
 
-import wandb
-
-from deeplabv3plus.train import Trainer
-
 
 # Sample Configuration
-config = {
-    'wandb_api_key': 'xxxx-your_wandb_api_key-xxxx',
+CONFIG = {
+    # We mandate specifying project_name and experiment_name in every config
+    # file. They are used for wandb runs if wandb api key is specified.
     'project_name': 'deeplabv3-plus',
     'experiment_name': 'camvid-segmentation-resnet-50-backbone',
 
-    'train_dataset_configs': {
+    'train_dataset_config': {
         'images': sorted(glob('./dataset/camvid/train/*')),
         'labels': sorted(glob('./dataset/camvid/trainannot/*')),
         'height': 512, 'width': 512, 'batch_size': 8
     },
 
-    'val_dataset_configs': {
+    'val_dataset_config': {
         'images': sorted(glob('./dataset/camvid/val/*')),
         'labels': sorted(glob('./dataset/camvid/valannot/*')),
         'height': 512, 'width': 512, 'batch_size': 8
     },
 
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
-    'num_classes': 20, 'height': 512, 'width': 512,
-    'backbone': 'resnet50', 'learning_rate': 0.0001,
+    'num_classes': 20, 'backbone': 'resnet50', 'learning_rate': 0.0001,
 
-    # Lambda for obtaining checkpoint lazily
-    # replace os.path.join(...) with your checkpoint path
-    'checkpoint_path_getter': lambda: os.path.join(
-        wandb.run.dir,
-        'deeplabv3-plus-camvid-segmentation-resnet-50-backbone.h5'
-    ),
+    'checkpoint_dir': "./checkpoints/",
+    'checkpoint_file_prefix': "deeplabv3plus_with_resnet50_",
 
     'epochs': 100
 }
+```
 
-trainer = Trainer(config)
-trainer.connect_wandb()
-history = trainer.train()
+- #### Save this file inside the configs directory. (As hinted in the file path above)
+- #### Register your config in the `__init.py__` module like below:
+`config/__init__.py`
+
+
+```
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""__init__ module for configs. Register your config file here by adding it's
+entry in the CONFIG_MAP as shown.
+"""
+
+import config.camvid_resnet50
+import config.human_parsing_resnet50
+
+
+CONFIG_MAP = {
+    'camvid_resnet50': config.camvid_resnet50.CONFIG,  # the config file we defined above
+    'human_parsing_resnet50': config.human_parsing_resnet50  # another config
+}
+
+```
+- #### Now you can run the trainer script like so (using the `camvid_resnet50` config key we registered above):
+```
+./trainer.py camvid_resnet50 --wandb_api_key YOUR_WANDB_API_KEY 
+```
+or, if you don't need wandb logging:
+```
+./trainer.py camvid_resnet50
 ```
 
 ## Inference

@@ -7,11 +7,10 @@ import tensorflow as tf
 
 
 CONFIG = {
-    'wandb_api_key': 'xxxx-your_wandb_api_key-xxxx',
     'project_name': 'deeplabv3-plus',
     'experiment_name': 'human-parsing-resnet-50-backbone',
 
-    'train_dataset_configs': {
+    'train_dataset_config': {
         'images': sorted(
             glob(
                 './dataset/instance-level_human_parsing/'
@@ -27,7 +26,7 @@ CONFIG = {
         'height': 512, 'width': 512, 'batch_size': 8
     },
 
-    'val_dataset_configs': {
+    'val_dataset_config': {
         'images': sorted(
             glob(
                 './dataset/instance-level_human_parsing/'
@@ -49,7 +48,7 @@ CONFIG = {
     'backbone': 'resnet50',
     'learning_rate': 0.0001,
 
-    'checkpoint_dir': "wandb://",
+    'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix':
     'deeplabv3-plus-human-parsing-resnet-50-backbone_',
 
