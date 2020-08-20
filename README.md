@@ -47,7 +47,7 @@ model.summary()
 ## Training
 
 Use the trainer.py script as documented with the help description below:
-```shell script
+```
 usage: trainer.py [-h] [--wandb_api_key WANDB_API_KEY] config_key
 
 Runs DeeplabV3+ trainer with the given config setting.
