@@ -136,7 +136,7 @@ CONFIG_MAP = {
 ```
 - #### Now you can run the trainer script like so (using the `camvid_resnet50` config key we registered above):
 ```
-./trainer.py camvid_resnet50 --wandb_api_key YOUR_WANDB_API_KEY 
+./trainer.py camvid_resnet50 --wandb_api_key <YOUR_WANDB_API_KEY>
 ```
 or, if you don't need wandb logging:
 ```
