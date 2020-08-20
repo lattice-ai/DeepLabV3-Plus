@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!camvid.sh
+!cityscapes.sh
+!download_human_parsing_dataset.sh

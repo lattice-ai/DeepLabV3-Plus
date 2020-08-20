@@ -14,6 +14,7 @@ def read_image(image_file, image_size, is_mask=False):
     image = tf.cast(image, tf.float32) / 127.5 - 1
     return image
 
+
 def infer(model_file, image_tensor):
     model = tf.keras.models.load_model(model_file)
     predictions = model.predict(np.expand_dims((image_tensor), axis=0))
