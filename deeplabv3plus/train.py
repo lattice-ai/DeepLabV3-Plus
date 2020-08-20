@@ -173,7 +173,7 @@ class Trainer:
                 monitor='val_loss',
                 save_best_only=True,
                 mode='min',
-                save_weights_only=True
+                save_weights_only=False
             ),
 
             self._get_logger_callback()
