@@ -38,7 +38,7 @@ Model Architectures can be found [here](./models.md).
 ## Code to test Model
 
 ```python
-from src.model.deeplabv3_plus import DeeplabV3Plus
+from deeplabv3plus.model.deeplabv3_plus import DeeplabV3Plus
 
 model = DeepLabV3Plus(backbone='resnet101')
 model.summary()
