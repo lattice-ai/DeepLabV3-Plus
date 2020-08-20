@@ -43,5 +43,5 @@ If provided, checkpoint_dir is set to wandb://
         CONFIG['wandb_api_key'] = ARGS.wandb_api_key
         CONFIG['checkpoint_dir'] = "wandb://"
 
-    TRAINER = Trainer(CONFIG_MAP[ARGS.CONFIG_KEY])
+    TRAINER = Trainer(CONFIG_MAP[ARGS.config_key])
     HISTORY = TRAINER.train()
