@@ -119,7 +119,7 @@ CONFIG = {
 `config/__init__.py`
 
 
-```
+```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
@@ -138,11 +138,11 @@ CONFIG_MAP = {
 
 ```
 - #### Now you can run the trainer script like so (using the `camvid_resnet50` config key we registered above):
-```
+```bash
 ./trainer.py camvid_resnet50 --wandb_api_key <YOUR_WANDB_API_KEY>
 ```
 or, if you don't need wandb logging:
-```
+```bash
 ./trainer.py camvid_resnet50
 ```
 
