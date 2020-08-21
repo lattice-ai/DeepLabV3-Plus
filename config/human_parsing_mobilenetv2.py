@@ -8,7 +8,7 @@ import tensorflow as tf
 
 CONFIG = {
     'project_name': 'deeplabv3-plus',
-    'experiment_name': 'human-parsing-resnet-50-backbone',
+    'experiment_name': 'human-parsing-mobilenet-v2-backbone',
 
     'train_dataset_config': {
         'images': sorted(

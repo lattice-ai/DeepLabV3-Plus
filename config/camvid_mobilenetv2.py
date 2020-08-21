@@ -12,7 +12,7 @@ CONFIG = {
     # We mandate specifying project_name and experiment_name in every config
     # file. They are used for wandb runs if wandb api key is specified.
     'project_name': 'deeplabv3-plus',
-    'experiment_name': 'camvid-segmentation-resnet-50-backbone',
+    'experiment_name': 'camvid-segmentation-mobilenet-v2-backbone',
 
     'train_dataset_config': {
         'images': sorted(glob('./dataset/camvid/train/*')),
