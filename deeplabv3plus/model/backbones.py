@@ -11,5 +11,10 @@ BACKBONES = {
         'model': tf.keras.applications.MobileNetV2,
         'feature_1': 'out_relu',
         'feature_2': 'block_3_depthwise_relu'
+    },
+    'resnet101': {
+        'model': tf.keras.applications.ResNet101,
+        'feature_1': 'conv4_block6_2_relu',
+        'feature_2': 'conv2_block3_2_relu'
     }
 }
