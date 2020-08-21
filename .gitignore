@@ -16,3 +16,4 @@ __pycache__/
 src/.ipynb_checkpoints/
 .ipynb_checkpoints/
 logs/
+.vscode/
