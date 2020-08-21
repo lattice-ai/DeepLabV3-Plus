@@ -201,8 +201,6 @@ plot_predictions(train_images[:4], (512, 512))
 
 ![](./assets/human_parsing_results/test_result_1.png)
 
-![](./assets/human_parsing_results/test_result_2.png)
-
 ![](./assets/human_parsing_results/test_result_3.png)
 
 ![](./assets/human_parsing_results/test_result_4.png)
