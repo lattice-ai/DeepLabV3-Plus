@@ -30,7 +30,7 @@ CONFIG = {
     'num_classes': 20, 'backbone': 'resnet101', 'learning_rate': 0.0001,
 
     'checkpoint_dir': "./checkpoints/",
-    'checkpoint_file_prefix': "deeplabv3plus_with_resnet50_",
+    'checkpoint_file_prefix': "deeplabv3plus_on_camvid_with_resnet101_",
 
     'epochs': 100
 }

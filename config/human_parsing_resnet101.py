@@ -50,7 +50,7 @@ CONFIG = {
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix':
-    'deeplabv3-plus-human-parsing-resnet-50-backbone_',
+    'deeplabv3-plus-human-parsing-resnet-101-backbone_',
 
     'epochs': 100
 }
