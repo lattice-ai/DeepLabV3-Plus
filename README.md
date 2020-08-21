@@ -4,7 +4,7 @@
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deepwrex/DeepLabV3-Plus/augmentations)
 [![HitCount](http://hits.dwyl.com/souimik12345/https://githubcom/soumik12345/DeepLabV3-Plus.svg)](http://hits.dwyl.com/souimik12345/https://githubcom/soumik12345/DeepLabV3-Plus)
 
-Tensorflow 2.2.0 implementation of DeepLabV3-Plus architecture as proposed by the paper [Encoder-Decoder with Atrous Separable
+Tensorflow 2.3.0 implementation of DeepLabV3-Plus architecture as proposed by the paper [Encoder-Decoder with Atrous Separable
 Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pdf).
 
 ![](./assets/deeplabv3_plus_diagram.png)
