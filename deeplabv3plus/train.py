@@ -101,8 +101,8 @@ class Trainer:
         assert 'backbone' in self.config and \
             isinstance(self.config['backbone'], str)
 
-        assert 'learning_rate' in self.config and \
-            isinstance(self.config['learning_rate'], float)
+        # assert 'learning_rate' in self.config and \
+        #     isinstance(self.config['learning_rate'], float)
 
         assert 'checkpoint_dir' in self.config and \
             isinstance(self.config['checkpoint_dir'], str)
