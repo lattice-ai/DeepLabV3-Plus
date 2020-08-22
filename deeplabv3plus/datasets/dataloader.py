@@ -1,29 +1,49 @@
+"""Module providing a data loader for DeepLabV3+."""
+
 import tensorflow as tf
+
+from deeplabv3plus.datasets.augmentations import Augmentation
 
 
 class GenericDataLoader:
+    """Class for loading data from the specified image file globs, and
+    converting them to a tf.data pipeline."""
+    def __init__(self, config):
+        self.config = config
 
-    def __init__(self, configs):
-        self.configs = configs
-        self.assert_dataset()
+        # primarily a wrapper for a functional API
+        # low memory footprint, hence safe to load eagerly
+        self.augmentation = Augmentation(config)
 
-    def assert_dataset(self):
-        assert 'images' in self.configs and 'labels' in self.configs
-        assert len(self.configs['images']) == len(self.configs['labels'])
-        print('Train Images are good to go')
+        self.assert_dataset_config()
+
+    def assert_dataset_config(self):
+        """Asserts dataset config."""
+        assert 'images' in self.config and 'labels' in self.config
+        assert len(self.config['images']) == len(self.config['labels'])
+        print('[+] Train Images are good to go!')
 
     def __len__(self):
-        return len(self.configs['images'])
+        return len(self.config['images'])
 
     def read_img(self, image_path, mask=False):
+        """Reads image from the given path.
+
+        Args:
+            image_path:
+                path to read image file from
+            mask:
+                boolean stating whether we are reading a normal RGB image or a
+                binary segmentation mask.
+        """
         image = tf.io.read_file(image_path)
         if mask:
             image = tf.image.decode_png(image, channels=1)
             image.set_shape([None, None, 1])
             image = (tf.image.resize(
                 images=image, size=[
-                    self.configs['height'],
-                    self.configs['width']
+                    self.config['height'],
+                    self.config['width']
                 ], method="nearest"
             ))
             image = tf.cast(image, tf.float32)
@@ -32,8 +52,8 @@ class GenericDataLoader:
             image.set_shape([None, None, 3])
             image = (tf.image.resize(
                 images=image, size=[
-                    self.configs['height'],
-                    self.configs['width']
+                    self.config['height'],
+                    self.config['width']
                 ]
             ))
             image = tf.cast(image, tf.float32) / 127.5 - 1
@@ -44,12 +64,25 @@ class GenericDataLoader:
         mask = self.read_img(mask_list, mask=True)
         return image, mask
 
+    def _augmentation_function(self, image, mask):
+        return tf.py_function(self.augmentation.compose_sequential,
+                              [image, mask],
+                              [tf.float32, tf.float32])
+
     def get_dataset(self):
+        """Loads data from the given config into a tf.data.Dataset and returns
+        it."""
         dataset = tf.data.Dataset.from_tensor_slices(
-            (self.configs['images'], self.configs['labels'])
+            (self.config['images'], self.config['labels'])
         )
-        dataset = dataset.map(self._map_function, num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        dataset = dataset.batch(self.configs['batch_size'], drop_remainder=True)
+
+        dataset = dataset.map(self._map_function,
+                              num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        dataset = dataset.map(self._augmentation_function,
+                              num_parallel_calls=tf.data.experimental.AUTOTUNE)
+
+        dataset = dataset.batch(self.config['batch_size'],
+                                drop_remainder=True)
         dataset = dataset.repeat()
         dataset = dataset.prefetch(tf.data.experimental.AUTOTUNE)
         return dataset
