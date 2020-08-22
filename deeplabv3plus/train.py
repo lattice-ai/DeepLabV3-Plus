@@ -188,7 +188,9 @@ class Trainer:
             validation_steps=self.val_data_length //
             self.config['val_dataset_config']['batch_size'],
 
-            epochs=self.config['epochs'], callbacks=callbacks
+            epochs=self.config['epochs'], callbacks=callbacks,
+
+            class_weight=self.config.get('class_weights', None)
         )
 
         return history
