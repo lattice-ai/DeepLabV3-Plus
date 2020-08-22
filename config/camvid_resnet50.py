@@ -12,7 +12,7 @@ CONFIG = {
     # We mandate specifying project_name and experiment_name in every config
     # file. They are used for wandb runs if wandb api key is specified.
     'project_name': 'deeplabv3-plus',
-    'experiment_name': 'camvid-resnet-50-backbone-polylr',
+    'experiment_name': 'camvid-segmentation-resnet-50-backbone',
 
     'train_dataset_config': {
         'images': sorted(glob('./dataset/camvid/train/*')),
@@ -27,11 +27,7 @@ CONFIG = {
     },
 
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
-    'num_classes': 20, 'backbone': 'resnet101',
-    'learning_rate': tf.keras.optimizers.schedules.PolynomialDecay(
-        0.007, 0.9997, end_learning_rate=0.0001,
-        power=1.0, cycle=False, name=None
-    ),
+    'num_classes': 20, 'backbone': 'resnet50', 'learning_rate': 0.0001,
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix': "deeplabv3plus_on_camvid_with_resnet50_",

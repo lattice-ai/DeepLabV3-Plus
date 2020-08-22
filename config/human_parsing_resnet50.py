@@ -8,7 +8,7 @@ import tensorflow as tf
 
 CONFIG = {
     'project_name': 'deeplabv3-plus',
-    'experiment_name': 'human-parsing-resnet-50-backbone-polylr',
+    'experiment_name': 'human-parsing-resnet-50-backbone',
 
     'train_dataset_config': {
         'images': sorted(
@@ -46,10 +46,7 @@ CONFIG = {
 
     'num_classes': 20,
     'backbone': 'resnet50',
-    'learning_rate': tf.keras.optimizers.schedules.PolynomialDecay(
-        0.007, 0.9997, end_learning_rate=0.0001,
-        power=1.0, cycle=False, name=None
-    ),
+    'learning_rate': 0.0001,
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix':
