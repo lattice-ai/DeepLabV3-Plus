@@ -8,7 +8,7 @@ import tensorflow as tf
 
 CONFIG = {
     'project_name': 'deeplabv3-plus',
-    'experiment_name': 'human-parsing-mobilenet-v2-backbone',
+    'experiment_name': 'human-parsing-mobilenet-v2-backbone-polylr',
 
     'train_dataset_config': {
         'images': sorted(
@@ -46,7 +46,10 @@ CONFIG = {
 
     'num_classes': 20,
     'backbone': 'mobilenetv2',
-    'learning_rate': 0.0001,
+    'learning_rate': tf.keras.optimizers.schedules.PolynomialDecay(
+        0.007, 0.9997, end_learning_rate=0.0001,
+        power=1.0, cycle=False, name=None
+    ),
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix':
