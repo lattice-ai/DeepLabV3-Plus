@@ -12,6 +12,7 @@ class Augmentation:
     """
     def __init__(self, config) -> None:
         self.config = config
+        assert 'random_brightness_max_delta' in self.config
         self.choice = None
 
     def apply_random_brightness(self, image, mask):
