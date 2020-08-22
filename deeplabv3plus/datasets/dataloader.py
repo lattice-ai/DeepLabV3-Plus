@@ -21,6 +21,7 @@ class GenericDataLoader:
         """Asserts dataset config."""
         assert 'images' in self.config and 'labels' in self.config
         assert len(self.config['images']) == len(self.config['labels'])
+        assert 'random_brightness_max_delta' in self.config
         print('[+] Train Images are good to go!')
 
     def __len__(self):
