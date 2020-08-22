@@ -22,7 +22,8 @@ CONFIG = {
         'random_contrast_lower_bound': 0.1,
         'random_contrast_upper_bound': 0.8,
         'seed': 1234,
-        'crop_percent': 1.0
+        'crop_percent': 1.0,
+        'image_channels': 3
     },
 
     'val_dataset_config': {
