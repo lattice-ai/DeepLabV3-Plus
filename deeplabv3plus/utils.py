@@ -32,3 +32,11 @@ def get_overlay(image, colored_mask):
     image = np.array(image).astype(np.uint8)
     overlay = cv2.addWeighted(image, 0.35, colored_mask, 0.65, 0)
     return overlay
+
+
+def get_class_weights(dataset, num_classes, c=1.02):
+    _, y= next(iter(dataset))
+    y_flat = y.flatten()
+    each_class = np.bincount(y_flat, minlength=num_classes)
+    p_class = each_class / len(y_flat)
+    return 1 / (np.log(c + p_class))
