@@ -64,11 +64,6 @@ class GenericDataLoader:
         mask = self.read_img(mask_list, mask=True)
         return image, mask
 
-    def _augmentation_function(self, image, mask):
-        return tf.py_function(self.augmentation.compose_sequential,
-                              [image, mask],
-                              [tf.float32, tf.float32])
-
     def get_dataset(self):
         """Loads data from the given config into a tf.data.Dataset and returns
         it."""
@@ -78,7 +73,7 @@ class GenericDataLoader:
 
         dataset = dataset.map(self._map_function,
                               num_parallel_calls=tf.data.experimental.AUTOTUNE)
-        dataset = dataset.map(self._augmentation_function,
+        dataset = dataset.map(self.augmentation.compose_sequential,
                               num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
         dataset = dataset.batch(self.config['batch_size'],
