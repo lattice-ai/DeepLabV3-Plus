@@ -6,6 +6,8 @@ from glob import glob
 
 import tensorflow as tf
 
+from deeplabv3plus.utils import get_class_weights
+
 
 # Sample Configuration
 CONFIG = {
@@ -27,7 +29,8 @@ CONFIG = {
     },
 
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
-    'num_classes': 20, 'backbone': 'resnet50', 'learning_rate': 0.0001,
+    'num_classes': 12, 'backbone': 'resnet50', 'learning_rate': 0.0001,
+    'class_weights': True
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix': "deeplabv3plus_on_camvid_with_resnet50_",

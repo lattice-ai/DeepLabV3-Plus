@@ -9,6 +9,7 @@ from wandb.keras import WandbCallback
 
 from deeplabv3plus.datasets import GenericDataLoader
 from deeplabv3plus.model import DeeplabV3Plus
+from deeplabv3plus.utils import get_class_weights
 
 
 class Trainer:
@@ -190,7 +191,9 @@ class Trainer:
 
             epochs=self.config['epochs'], callbacks=callbacks,
 
-            class_weight=self.config.get('class_weights', None)
+            class_weight=get_class_weights(
+                self.train_dataset, self.config['num_classes']
+            ) if self.config['class_weights'] else None
         )
 
         return history
