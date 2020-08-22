@@ -20,7 +20,8 @@ CONFIG = {
         'height': 512, 'width': 512, 'batch_size': 8,
         'random_brightness_max_delta': 0.1,
         'random_contrast_lower_bound': 0.1,
-        'random_contrast_upper_bound': 0.8
+        'random_contrast_upper_bound': 0.8,
+        'seed': 1234
     },
 
     'val_dataset_config': {
