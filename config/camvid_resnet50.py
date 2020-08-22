@@ -32,7 +32,16 @@ CONFIG = {
     'val_dataset_config': {
         'images': sorted(glob('./dataset/camvid/val/*')),
         'labels': sorted(glob('./dataset/camvid/valannot/*')),
-        'height': 512, 'width': 512, 'batch_size': 8
+        'height': 512, 'width': 512, 'batch_size': 8,
+        'random_brightness_max_delta': 0.1,
+        'random_contrast_lower_bound': 0.1,
+        'random_contrast_upper_bound': 0.8,
+        'seed': 1234,
+        'crop_percent': 1.0,
+        'image_channels': 3,
+        'label_channels': 1,
+        'target_image_height': 512,
+        'target_image_width': 512
     },
 
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
