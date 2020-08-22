@@ -24,7 +24,9 @@ CONFIG = {
         'seed': 1234,
         'crop_percent': 1.0,
         'image_channels': 3,
-        'label_channels': 1
+        'label_channels': 1,
+        'target_image_height': 512,
+        'target_image_width': 512
     },
 
     'val_dataset_config': {

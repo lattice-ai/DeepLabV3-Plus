@@ -143,9 +143,12 @@ class Augmentation:
                 corresponding mask for the given image, which is resized along
                 with the image.
         """
-        image = tf.image.resize(image, self.config['image_size'])
+        image = tf.image.resize(image,
+                                (self.config['target_image_height'],
+                                 self.config['target_image_width']))
         mask = tf.image.resize(mask,
-                               self.config['image_size'],
+                               (self.config['target_image_height'],
+                                self.config['target_image_width']),
                                method="nearest")
         return image, mask
 
