@@ -28,6 +28,7 @@ CONFIG = {
 
     'strategy': tf.distribute.OneDeviceStrategy(device="/gpu:0"),
     'num_classes': 20, 'backbone': 'resnet50', 'learning_rate': 0.0001,
+    'random_brightness_max_delta': 0.1,
 
     'checkpoint_dir': "./checkpoints/",
     'checkpoint_file_prefix': "deeplabv3plus_with_resnet50_",
