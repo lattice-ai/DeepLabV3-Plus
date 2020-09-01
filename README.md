@@ -15,6 +15,10 @@ Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pd
 
 Model Architectures can be found [here](./models.md).
 
+## Contributors
+
+[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/0)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/0)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/1)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/1)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/2)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/2)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/3)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/3)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/4)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/4)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/5)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/5)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/6)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/6)[![](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/images/7)](https://sourcerer.io/fame/soumik12345/lattice-ai/DeepLabV3-Plus/links/7)
+
 ## Setup Datasets
 
 - **CamVid**
