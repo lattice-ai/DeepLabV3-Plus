@@ -11,5 +11,5 @@ import config.human_parsing_resnet50
 
 CONFIG_MAP = {
     'camvid_resnet50': config.camvid_resnet50.CONFIG,
-    'human_parsing_resnet50': config.human_parsing_resnet50
+    'human_parsing_resnet50': config.human_parsing_resnet50.CONFIG
 }
