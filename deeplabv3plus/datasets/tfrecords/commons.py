@@ -17,6 +17,6 @@ def split_list(given_list: List, chunk_size: int):
 
 def create_example(image_path, label_path):
     return {
-        'image': bytes_feature(tf.io.read_file(image_path)),
-        'label': bytes_feature(tf.io.read_file(label_path))
+        'image': bytes_feature(tf.io.read_file(image_path).numpy()),
+        'label': bytes_feature(tf.io.read_file(label_path).numpy())
     }
