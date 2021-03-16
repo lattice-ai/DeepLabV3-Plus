@@ -24,7 +24,7 @@ class TFRecordCreator:
             '{}-{}'.format(self.dataset_name, dataset_split)
         )
         if not os.path.exists(write_directory):
-            os.mkdirs(write_directory, exist_ok=True)
+            os.makedirs(write_directory, exist_ok=True)
         progress_bar = tqdm_notebook if self.is_notebook else tqdm
         for shard, image_shard in enumerate(progress_bar(image_shards)):
             shard_size = len(image_shard)
