@@ -38,7 +38,11 @@ class TFRecordCreator:
                 for data_index, image_data in enumerate(image_shard):
                     example = create_example(
                         image_path=image_data, label_path=label_shard[data_index])
-                    out_files.write(tf.train.Example(example).SerializeToString())
+                    out_files.write(
+                        tf.train.Example(
+                            features=tf.train.Features(feature=example)
+                        ).SerializeToString()
+                    )
 
     def create(self, image_files: List[str], label_files: List[str], dataset_split: str):
         image_shards = split_list(image_files, chunk_size=self.shard_size)
