@@ -1,5 +1,6 @@
 .idea/
 env/
+venv/
 test.py
 .vscode/
 src/backbones/__pycache__/
