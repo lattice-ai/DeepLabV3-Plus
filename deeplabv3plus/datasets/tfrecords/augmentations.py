@@ -16,9 +16,9 @@ class AugmentationFactory:
 
     @staticmethod
     def _random_jitter(image):
-        image = tf.image.stateless_random_saturation(image, 0.9, 1.1)
-        image = tf.image.stateless_random_brightness(image, 0.075)
-        image = tf.image.stateless_random_contrast(image, 0.9, 1.1)
+        image = tf.image.random_saturation(image, 0.9, 1.1)
+        image = tf.image.random_brightness(image, 0.075)
+        image = tf.image.random_contrast(image, 0.9, 1.1)
         return image
 
     def _map_augmentations(self, image, label):
