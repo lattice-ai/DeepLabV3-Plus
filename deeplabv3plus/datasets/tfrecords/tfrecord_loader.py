@@ -35,7 +35,7 @@ class TFRecordLoader:
         image = features.pop('image')
         image = self.parse_image(image)
         label = features.pop('label')
-        label = self.parse_image(label)
+        label = self.parse_label(label)
         return image, label
 
     def get_dataset(self, train_tfrecord_files: List[str], ignore_order: bool = False):

@@ -9,7 +9,7 @@ class AugmentationFactory:
         self.image_channels, self.label_channels = 3, 1
 
     def _flip_horizontal(self, image, label):
-        comb_tensor = tf.concat([image, label], axis=2)
+        comb_tensor = tf.concat([image, label], axis=-1)
         comb_tensor = tf.image.random_flip_left_right(comb_tensor)
         image, label = tf.split(comb_tensor, [self.image_channels, self.label_channels], axis=-1)
         return image, label
