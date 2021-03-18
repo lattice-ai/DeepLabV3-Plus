@@ -25,10 +25,8 @@ def create_example(image_path, label_path):
 
 
 def plot_result(
-    images, captions: List[str], title: str, figsize: Tuple[int, int]):
+    images, captions: List[str], figsize: Tuple[int, int]):
     fig = plt.figure(figsize=figsize)
-    plt.suptitle(
-        'Label: ' + title[0], fontsize=20, fontweight='bold')
     for index in range(len(captions)):
         fig.add_subplot(
             1, len(captions), index + 1
