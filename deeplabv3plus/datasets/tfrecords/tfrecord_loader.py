@@ -47,3 +47,11 @@ class TFRecordLoader:
         dataset = dataset.map(
             map_func=self.map_function, num_parallel_calls=tf.data.AUTOTUNE)
         return dataset
+
+
+def configure_dataset(augmented_dataset, shuffle_buffer: int = 128, batch_size: int = 16):
+    dataset = augmented_dataset.repeat()
+    dataset = augmented_dataset.shuffle(shuffle_buffer)
+    dataset = dataset.batch(batch_size)
+    dataset = dataset.prefetch(buffer_size=tf.data.AUTOTUNE)
+    return dataset
