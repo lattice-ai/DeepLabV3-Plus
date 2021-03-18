@@ -23,7 +23,7 @@ class AugmentationFactory:
 
     def _map_augmentations(self, image, label):
         if self.apply_horizontal_flip:
-            image = self._flip_horizontal(image=image, label=label)
+            image, label = self._flip_horizontal(image=image, label=label)
         image = self._random_jitter(image=image) if self.apply_jitter else image
         return image, label
 
