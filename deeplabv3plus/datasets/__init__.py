@@ -4,5 +4,4 @@ from .tfrecords import (
     TFRecordLoader,
     TFRecordDataset,
     AugmentationFactory,
-    configure_dataset
 )
