@@ -95,6 +95,8 @@ class DeeplabV3Plus(tf.keras.Model):
     def call(self, inputs, training=None, mask=None):
         input_a = self.backbone_feature_1(inputs)
 
+        self.aspp.build(input_a.shape)
+        
         input_a = self.aspp(input_a)
         input_a = self.input_a_upsampler_getter(input_a.shape)(input_a)
 
