@@ -7,7 +7,7 @@ from typing import List
 import tensorflow as tf
 import numpy as np
 
-from .tfrecord_loader import TFRecordLoader, configure_dataset
+from .tfrecord_loader import TFRecordLoader
 from .commons import plot_result
 from .augmentations import AugmentationFactory
 
@@ -57,7 +57,6 @@ class TFRecordDataset:
         self._dataset = augmentation_factory.augment_dataset(
             self._dataset)
 
-        self._dataset = configure_dataset(self._dataset)
         return self._dataset
 
     def summary(self, visualize: bool = False, num_samples: int = 4):
@@ -82,3 +81,14 @@ class TFRecordDataset:
             plot_result([x.numpy().astype(np.uint8),
                          y.numpy().astype(np.uint8)],
                         ['Image', 'Label'], (20, 6))
+
+    def configured_dataset(
+            self,
+            shuffle_buffer: int = 127,
+            batch_size: int = 16):
+        
+        __dataset = self.dataset.repeat()
+        __dataset = __dataset.shuffle(shuffle_buffer)
+        __dataset = __dataset.batch(batch_size)
+        __dataset = __dataset.prefetch(buffer_size=tf.data.AUTOTUNE)
+        return __dataset

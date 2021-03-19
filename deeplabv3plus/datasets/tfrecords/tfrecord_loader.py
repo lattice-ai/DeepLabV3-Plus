@@ -20,7 +20,8 @@ class TFRecordLoader:
         label = tf.image.decode_png(label, channels=1)
         label.set_shape([None, None, 1])
         label = (tf.image.resize(
-            images=label, size=[self.image_size, self.image_size], method="nearest"
+            images=label, size=[self.image_size,
+                                self.image_size], method="nearest"
         ))
         label = tf.cast(label, tf.float32)
         return label
@@ -47,11 +48,3 @@ class TFRecordLoader:
         dataset = dataset.map(
             map_func=self.map_function, num_parallel_calls=tf.data.AUTOTUNE)
         return dataset
-
-
-def configure_dataset(augmented_dataset, shuffle_buffer: int = 128, batch_size: int = 16):
-    dataset = augmented_dataset.repeat()
-    dataset = augmented_dataset.shuffle(shuffle_buffer)
-    dataset = dataset.batch(batch_size)
-    dataset = dataset.prefetch(buffer_size=tf.data.AUTOTUNE)
-    return dataset
