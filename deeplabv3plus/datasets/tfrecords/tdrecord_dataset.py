@@ -7,6 +7,7 @@ import tensorflow as tf
 
 from .tfrecord_loader import TFRecordLoader
 from .commons import plot_result
+from .augmentations import AugmentationFactory
 
 
 class TFRecordDataset:
@@ -18,17 +19,25 @@ class TFRecordDataset:
         tfrecords: List of tfrecord str representations
     """
 
-    def __init__(self, tfrecords: List[str], image_size: int):
+    def __init__(self,
+                 tfrecords: List[str],
+                 image_size: int,
+                 apply_flips: bool,
+                 apply_jitter: bool):
+
         self._tfrecords = tfrecords
         self._image_size = image_size
         self._dataset = None
+
+        self._apply_flips = apply_flips
+        self._apply_jitter = apply_jitter
 
     @property
     def dataset(self) -> tf.data.Dataset:
         """
         Loads dataset from tfrecords and returns a
         preconfigured instance of tf.data.Dataset
-        
+
         Returns:
             instance of tf.data.Dataset
         """
@@ -36,9 +45,15 @@ class TFRecordDataset:
             return self._dataset
 
         loader = TFRecordLoader(self._image_size)
-        self._dataset = configure_dataset(
-            loader.get_dataset(self._tfrecords))
+        self._dataset = loader.get_dataset(self._tfrecords)
 
+        augmentation_factory = AugmentationFactory(
+            apply_horizontal_flip=self._apply_flips,
+            apply_jitter=self._apply_jitter
+        )
+
+        self._dataset = augmentation_factory.augment_dataset(
+            self._dataset)
         return self._dataset
 
     def summary(self, visualize: bool = False, num_samples: int = 4):
