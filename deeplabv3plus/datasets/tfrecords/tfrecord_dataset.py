@@ -3,7 +3,9 @@ Module providing a class for representing TF Record based datasets.
 """
 
 from typing import List
+
 import tensorflow as tf
+import numpy as np
 
 from .tfrecord_loader import TFRecordLoader
 from .commons import plot_result
