@@ -1,5 +1,8 @@
 from .dataloader import GenericDataLoader
 from .tfrecords import (
-    TFRecordCreator, TFRecordLoader,
-    AugmentationFactory, configure_dataset
+    TFRecordCreator,
+    TFRecordLoader,
+    TFRecordDataset,
+    AugmentationFactory,
+    configure_dataset
 )
