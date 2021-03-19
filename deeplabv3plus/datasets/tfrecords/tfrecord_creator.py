@@ -17,15 +17,21 @@ class TFRecordCreator:
         self.shard_size = shard_size
         self.is_notebook = is_notebook
 
-    def _create_tfrecord_files(
-            self, image_shards: List[List[str]], label_shards: List[List[str]], dataset_split: str):
+    def _create_tfrecord_files(self,
+                               image_shards: List[List[str]],
+                               label_shards: List[List[str]],
+                               dataset_split: str):
+        
         write_directory = os.path.join(
             self.output_directory,
             '{}-{}'.format(self.dataset_name, dataset_split)
         )
+
         if not os.path.exists(write_directory):
             os.makedirs(write_directory, exist_ok=True)
+
         progress_bar = tqdm_notebook if self.is_notebook else tqdm
+        
         for shard, image_shard in enumerate(progress_bar(image_shards)):
             shard_size = len(image_shard)
             label_shard = label_shards[shard]
@@ -36,19 +42,22 @@ class TFRecordCreator:
             )
             with tf.io.TFRecordWriter(file_path) as out_files:
                 for data_index, image_data in enumerate(image_shard):
-                    example = create_example(
-                        image_path=image_data, label_path=label_shard[data_index])
-                    out_files.write(
-                        tf.train.Example(
-                            features=tf.train.Features(feature=example)
-                        ).SerializeToString()
-                    )
+                    example = create_example(image_path=image_data,
+                                             label_path=label_shard[data_index])
 
-    def create(self, image_files: List[str], label_files: List[str], dataset_split: str):
+                    out_files.write(tf.train.Example(
+                        features=tf.train.Features(feature=example)
+                    ).SerializeToString())
+
+    def create(self,
+               image_files: List[str],
+               label_files: List[str],
+               dataset_split: str):
         image_shards = split_list(image_files, chunk_size=self.shard_size)
         label_shards = split_list(label_files, chunk_size=self.shard_size)
+
         print('[+] Creating {} TFRecords...'.format(dataset_split))
-        self._create_tfrecord_files(
-            image_shards=image_shards, label_shards=label_shards,
-            dataset_split=dataset_split
-        )
+
+        self._create_tfrecord_files(image_shards=image_shards,
+                                    label_shards=label_shards,
+                                    dataset_split=dataset_split)
