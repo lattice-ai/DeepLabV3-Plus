@@ -7,7 +7,7 @@ from typing import List
 import tensorflow as tf
 import numpy as np
 
-from .tfrecord_loader import TFRecordLoader
+from .tfrecord_loader import TFRecordLoader, configure_dataset
 from .commons import plot_result
 from .augmentations import AugmentationFactory
 
@@ -56,6 +56,8 @@ class TFRecordDataset:
 
         self._dataset = augmentation_factory.augment_dataset(
             self._dataset)
+
+        self._dataset = configure_dataset(self._dataset)
         return self._dataset
 
     def summary(self, visualize: bool = False, num_samples: int = 4):
