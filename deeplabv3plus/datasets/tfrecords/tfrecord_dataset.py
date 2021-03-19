@@ -67,7 +67,7 @@ class TFRecordDataset:
             num_samples:
                 int - no of samples to visualize if visualizing
         """
-        print(self._dataset)
+        print(self.dataset)
 
         if not visualize:
             return
