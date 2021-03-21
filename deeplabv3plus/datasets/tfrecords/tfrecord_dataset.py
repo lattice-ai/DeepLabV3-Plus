@@ -87,7 +87,6 @@ class TFRecordDataset:
             shuffle_buffer: int = 127,
             batch_size: int = 16):
 
-        print(self.dataset)
         __dataset = self._dataset.repeat()
         __dataset = __dataset.shuffle(shuffle_buffer)
         __dataset = __dataset.batch(batch_size)
