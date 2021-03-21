@@ -34,15 +34,7 @@ class TFRecordDataset:
         self._apply_flips = apply_flips
         self._apply_jitter = apply_jitter
 
-    @property
-    def dataset(self) -> tf.data.Dataset:
-        """
-        Loads dataset from tfrecords and returns a
-        preconfigured instance of tf.data.Dataset
-
-        Returns:
-            instance of tf.data.Dataset
-        """
+    def create_dataset(self):
         if self._dataset is not None:
             return self._dataset
 
@@ -56,8 +48,6 @@ class TFRecordDataset:
 
         self._dataset = augmentation_factory.augment_dataset(
             self._dataset)
-
-        return self._dataset
 
     def summary(self, visualize: bool = False, num_samples: int = 4):
         """
