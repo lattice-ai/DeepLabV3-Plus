@@ -88,7 +88,7 @@ class TFRecordDataset:
             batch_size: int = 16):
 
         print(self.dataset)
-        __dataset = self.dataset.repeat()
+        __dataset = self._dataset.repeat()
         __dataset = __dataset.shuffle(shuffle_buffer)
         __dataset = __dataset.batch(batch_size)
         __dataset = __dataset.prefetch(tf.data.AUTOTUNE)

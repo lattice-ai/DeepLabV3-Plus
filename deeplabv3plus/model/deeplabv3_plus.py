@@ -13,7 +13,6 @@ def DeeplabV3Plus(input_shape: List[int], backbone: str, n_classes: int):
     backbone_model = BACKBONES[backbone]['model'](
         weights='imagenet', include_top=False, input_tensor=model_input
     )
-    print(BACKBONES[backbone]['feature_1'])
     layer = backbone_model.get_layer(BACKBONES[backbone]['feature_1']).output
     layer = aspp_block(layer)
     input_a = tf.keras.layers.UpSampling2D(
