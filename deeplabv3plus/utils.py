@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt
@@ -29,6 +28,7 @@ def decode_segmask(mask, colormap, n_classes):
 
 
 def get_overlay(image, colored_mask):
+    import cv2
     image = tf.keras.preprocessing.image.array_to_img(image)
     image = np.array(image).astype(np.uint8)
     overlay = cv2.addWeighted(image, 0.35, colored_mask, 0.65, 0)
