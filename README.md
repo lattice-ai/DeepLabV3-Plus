@@ -2,7 +2,7 @@
 
 [![](https://camo.githubusercontent.com/7ce7d8e78ad8ddab3bea83bb9b98128528bae110/68747470733a2f2f616c65656e34322e6769746875622e696f2f6261646765732f7372632f74656e736f72666c6f772e737667)](https://tensorflow.org/)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/deepwrex/DeepLabV3-Plus/augmentations)
-[![HitCount](http://hits.dwyl.com/souimik12345/https://githubcom/soumik12345/DeepLabV3-Plus.svg)](http://hits.dwyl.com/souimik12345/https://githubcom/soumik12345/DeepLabV3-Plus)
+[![HitCount](http://hits.dwyl.com/lattice-ai/DeepLabV3-Plus.svg?style=flat-square)](http://hits.dwyl.com/lattice-ai/DeepLabV3-Plus)
 
 Tensorflow 2.2.0 implementation of DeepLabV3-Plus architecture as proposed by the paper [Encoder-Decoder with Atrous Separable
 Convolution for Semantic Image Segmentation](https://arxiv.org/pdf/1802.02611.pdf).
